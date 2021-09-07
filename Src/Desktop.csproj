@@ -1,0 +1,209 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup Label="Globals">
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>Desktop</AssemblyName>
+    <ApplicationIcon>server_earth.ico</ApplicationIcon>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Desktop.snk</AssemblyOriginatorKeyFile>
+    <PackageId>Walter.Web.Firewall.ManagementDesktop</PackageId>
+    <Authors>Walter Verhoeven</Authors>
+    <Company>VESNX AG</Company>
+    <Description>Management desktop for the walter.web.firewall NuGet package</Description>
+    <Copyright>© 2021 Walter Verhoeven, all rights reserved.</Copyright>
+    <PackageProjectUrl>htps://www.asp-waf.com</PackageProjectUrl>
+    <Product>WPF Management Desktop</Product>
+    <PackageReleaseNotes>Release 0, beta</PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/PeterPann23/FireWallDesktop</RepositoryUrl>
+    <RepositoryType>GitGub</RepositoryType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="log4net.config" />
+    <None Remove="Pdf\DHS.pdf" />
+    <None Remove="Pdf\DOJ.pdf" />
+    <None Remove="Pdf\ENISA.pdf" />
+    <None Remove="Resources\16\about.png" />
+    <None Remove="Resources\16\document_view.png" />
+    <None Remove="Resources\16\export.png" />
+    <None Remove="Resources\16\pin2_blue.png" />
+    <None Remove="Resources\16\pin2_green.png" />
+    <None Remove="Resources\16\pin2_grey.png" />
+    <None Remove="Resources\16\pin2_orange.png" />
+    <None Remove="Resources\16\pin2_red.png" />
+    <None Remove="Resources\16\pin2_yellow.png" />
+    <None Remove="Resources\16\refresh.png" />
+    <None Remove="Resources\16\symbol_at.png" />
+    <None Remove="Resources\16\unknown.png" />
+    <None Remove="Resources\16\window_settings.png" />
+    <None Remove="Resources\24\clock.png" />
+    <None Remove="Resources\24\details.png" />
+    <None Remove="Resources\24\document_out.png" />
+    <None Remove="Resources\24\document_view.png" />
+    <None Remove="Resources\24\export.png" />
+    <None Remove="Resources\24\location_pin.png" />
+    <None Remove="Resources\24\magnifying_glass.png" />
+    <None Remove="Resources\24\NotePad.png" />
+    <None Remove="Resources\24\PDF.png" />
+    <None Remove="Resources\24\pin2_blue.png" />
+    <None Remove="Resources\24\pin2_green.png" />
+    <None Remove="Resources\24\pin2_grey.png" />
+    <None Remove="Resources\24\pin2_orange.png" />
+    <None Remove="Resources\24\pin2_red.png" />
+    <None Remove="Resources\24\pin2_yellow.png" />
+    <None Remove="Resources\24\refresh.png" />
+    <None Remove="Resources\24\signal_flag_green.png" />
+    <None Remove="Resources\24\signal_flag_red.png" />
+    <None Remove="Resources\24\ThemePicker.png" />
+    <None Remove="Resources\24\unknown.png" />
+    <None Remove="Resources\24\user_headset.png" />
+    <None Remove="Resources\24\window_earth.png" />
+    <None Remove="Resources\24\XLS.png" />
+    <None Remove="Resources\32\Dashboard.png" />
+    <None Remove="Resources\32\EndPoint.png" />
+    <None Remove="Resources\32\ISP.png" />
+    <None Remove="Resources\32\Penetration.png" />
+    <None Remove="Resources\32\PortScan.png" />
+    <None Remove="Resources\32\UserAgent.png" />
+    <None Remove="Resources\control_panel.png" />
+    <None Remove="Resources\server_to_client.png" />
+    <None Remove="Resources\user_headset.png" />
+    <None Remove="Resources\world.dbf" />
+    <None Remove="Resources\world.shp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="log4net.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\16\document_view.png" />
+    <Resource Include="Resources\24\document_out.png" />
+    <Resource Include="Resources\24\export.png" />
+    <Resource Include="Resources\24\NotePad.png" />
+    <EmbeddedResource Include="Pdf\ENISA.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pdf\DOJ.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pdf\DHS.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\control_panel.png" />
+    <EmbeddedResource Include="Resources\server_to_client.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="log4net" Version="2.0.12" />
+    <PackageReference Include="Syncfusion.SfBarcode.WPF" Version="19.2.0.59" />
+    <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="19.2.0.59" />
+    <PackageReference Include="Walter.BOM" Version="2021.9.7.1121" />
+    <PackageReference Include="Prism.DryIoc" Version="8.1.97" />
+    <PackageReference Include="Syncfusion.DataGridExcelExport.Wpf" Version="19.2.0.59" />
+    <PackageReference Include="Syncfusion.SfNavigationDrawer.WPF" Version="19.2.0.59" />
+    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="19.2.0.59" />
+    <PackageReference Include="Syncfusion.Themes.FluentLight.WPF" Version="19.2.0.59" />
+    <PackageReference Include="syncfusion.ui.wpf.net" Version="19.2.0.59" />
+    <PackageReference Include="Syncfusion.Grid.WPF" Version="19.2.0.59" />
+    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="19.2.0.59" />
+    <PackageReference Include="Syncfusion.SfSpreadsheet.WPF" Version="19.2.0.59" />
+    <PackageReference Include="Walter.Net.Networking" Version="2021.9.7.1121" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Desktop.Authentication\Desktop.Authentication.csproj" />
+    <ProjectReference Include="..\..\Desktop.Reporting\Desktop.Reporting.csproj" />
+    <ProjectReference Include="..\Desktop.Core\Desktop.Core.csproj" />
+    <ProjectReference Include="..\Services\Desktop.Services\Desktop.Services.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\16\about.png" />
+    <Resource Include="Resources\16\export.png" />
+    <Resource Include="Resources\16\pin2_blue.png" />
+    <Resource Include="Resources\16\pin2_green.png" />
+    <Resource Include="Resources\16\pin2_grey.png" />
+    <Resource Include="Resources\16\pin2_orange.png" />
+    <Resource Include="Resources\16\pin2_red.png" />
+    <Resource Include="Resources\16\pin2_yellow.png" />
+    <Resource Include="Resources\16\refresh.png" />
+    <Resource Include="Resources\16\symbol_at.png" />
+    <Resource Include="Resources\16\unknown.png" />
+    <Resource Include="Resources\16\window_settings.png" />
+    <Resource Include="Resources\24\clock.png" />
+    <Resource Include="Resources\24\details.png" />
+    <Resource Include="Resources\24\document_view.png" />
+    <Resource Include="Resources\24\location_pin.png" />
+    <Resource Include="Resources\24\magnifying_glass.png" />
+    <Resource Include="Resources\24\PDF.png" />
+    <Resource Include="Resources\24\pin2_blue.png" />
+    <Resource Include="Resources\24\pin2_green.png" />
+    <Resource Include="Resources\24\pin2_grey.png" />
+    <Resource Include="Resources\24\pin2_orange.png" />
+    <Resource Include="Resources\24\pin2_red.png" />
+    <Resource Include="Resources\24\pin2_yellow.png" />
+    <Resource Include="Resources\24\refresh.png" />
+    <Resource Include="Resources\24\signal_flag_green.png" />
+    <Resource Include="Resources\24\signal_flag_red.png" />
+    <Resource Include="Resources\24\ThemePicker.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\24\unknown.png" />
+    <Resource Include="Resources\24\user_headset.png" />
+    <Resource Include="Resources\24\window_earth.png" />
+    <Resource Include="Resources\24\XLS.png" />
+    <Resource Include="Resources\32\Dashboard.png" />
+    <Resource Include="Resources\32\ISP.png" />
+    <Resource Include="Resources\32\EndPoint.png" />
+    <Resource Include="Resources\32\Penetration.png" />
+    <Resource Include="Resources\32\PortScan.png" />
+    <Resource Include="Resources\32\UserAgent.png" />
+    <Resource Include="Resources\user_headset.png" />
+    <Resource Include="Resources\world.dbf" />
+    <Resource Include="Resources\world.shp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Controls\TimeRangePicker.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Controls\TimeScaleSlider.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="ColorStyles.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\TimeRangePicker.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\TimeScaleSlider.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="License.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Pdf\AbuseReport_intro.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ReadMe.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\ASP-WAF HoneyPot.connect">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

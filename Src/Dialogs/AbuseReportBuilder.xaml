@@ -1,0 +1,584 @@
+﻿<UserControl xmlns:Controll="clr-namespace:Desktop.Authentication.Controll;assembly=Desktop.Authentication"  xmlns:Controls="clr-namespace:Desktop.Controls"  x:Class="Desktop.Dialogs.AbuseReportBuilder"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"   
+             xmlns:Syncfusion="http://schemas.syncfusion.com/wpf"     
+      
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:vm="clr-namespace:Desktop.Dialogs"              
+             xmlns:converters="clr-namespace:Desktop.Converters"  
+             xmlns:models="clr-namespace:Desktop.Model;assembly=Desktop.Model" 
+             xmlns:global="clr-namespace:System.Globalization;assembly=System.Runtime" 
+             
+             d:DataContext="{d:DesignInstance Type=vm:AbuseReportBuilderViewModel}"
+             Padding="15"
+             mc:Ignorable="d"
+             prism:ViewModelLocator.AutoWireViewModel="True" 
+             d:Background="White" 
+             
+
+  
+        >
+    <prism:Dialog.WindowStyle>
+        <Style TargetType="Window">
+            <Setter Property="prism:Dialog.WindowStartupLocation" Value="CenterOwner" />
+            <Setter Property="ResizeMode" Value="CanMinimize"/>
+            <Setter Property="WindowState" Value="Maximized"/>
+
+        </Style>
+    </prism:Dialog.WindowStyle>
+
+    <UserControl.Resources>
+
+
+        <converters:IPAddressAbuseToTimeLineConverter x:Key="ipAddressAbuseToTimeLineConverter"/>
+        <converters:IPAddressAbusePortAttackVisibilityConverter x:Key="ipAddressAbusePortAttackVisibilityConverter"/>
+        <converters:IPAddressAbuseWebBasedAttacksVisibilityConverter x:Key="ipAddressAbuseWebBasedAttacksVisibilityConverter"/>
+
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <x:Array Type="models:WhoisContactDetails" x:Key="contacts">
+            <models:WhoisContactDetails Name="VESNX AG" 
+                                         Address="29 Boulevard Grande-Duchesse Charlotte, 1331 Luxembourg" 
+                                         Phone="+325 123 1234567"                                                   
+                                        
+                                         EMail="abuse@spam.com"
+                                         Created="2021.01.01"
+                                         LastModified="2021.06.01"                                                        
+                                         WhoisContactType="Organization"
+                                         />
+            <models:WhoisContactDetails Name="Peter Müller" 
+                                        Address="Gottard strasse 12, 142 Zurich, Schweiz" 
+                                        Phone="0123 1234567"
+                                        Fax="0123 1234568"
+                                       
+                                        EMail="abuse@spam.com"
+                                        Created="2021.01.01"
+                                        LastModified="2021.06.01"
+                                        WhoisContactType="Administration"
+                                        />
+        </x:Array>
+
+
+        <Style x:Key="datetimeEdit" TargetType="Syncfusion:DateTimeEdit">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="EnableAlphaKeyNavigation" Value="True"/>
+            <Setter Property="Pattern" Value="FullDateTime"/>
+            <Setter Property="CanEdit" Value="True"/>
+            <Setter Property="NoneDateText" Value="select a date"/>
+        </Style>
+        <Style x:Key="Refresh" TargetType="{x:Type Button}">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="5 0"/>
+            <Setter Property="ToolTip" Value="Send abuse report"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid>
+                            <Image Source="/resources/24/refresh.png" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Cursor" Value="Hand"/>
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <TextBlock  Style="{StaticResource Header1}" >
+                <Run Text="Abuse report builder for"/>
+                <Run Text="{Binding Path=Report.Reference, Mode=OneWay}" d:Text="RU-RMENGINEERING-20160524"/>
+            </TextBlock>
+            <TextBlock Grid.Row="1">
+                <Run Text="This dialog allows you to select the malicious activity that you like to include in this report to"/>
+                <Run Text="{Binding Path=Report.AbuseEmail, Mode=OneWay}" d:Text="abuse@rudatadog.com" FontWeight="DemiBold"/>
+                <LineBreak/>
+                <Run Text="Use the below control if you would like to alter the abuse report data range."/>
+            </TextBlock>
+
+
+            <Expander Grid.Row="2" IsExpanded="True">
+                <Expander.Header>
+                    <TextBlock Text="Data filter" FontWeight="DemiBold"/>
+                </Expander.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" Background="{StaticResource Gray7}" Padding="5" Margin="0 5" CornerRadius="5">
+                        <Grid >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" x:Name="reportRow"/>
+                                <RowDefinition Height="25" x:Name="daterow"/>
+                                <RowDefinition Height="25" x:Name="dataScopeRow"/>
+                                <RowDefinition Height="25" x:Name="chartRow"/>
+                                <RowDefinition Height="25" x:Name="chaptersRow"/>
+                                <RowDefinition Height="auto" />
+
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.ColumnSpan="2" TextWrapping="WrapWithOverflow" Text="You can change the reported scope as well as data to report on, the minimum duration for a report however is 24 hours and date are not allowed to be in the future"/>
+
+
+                            <TextBlock Grid.Row="1" Text="Date Range" FontWeight="DemiBold"  VerticalAlignment="Center"/>
+                            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+                                <TextBlock Text=": from" Margin="0,0,12,0"  FontWeight="Light"  VerticalAlignment="Center"/>
+                                <Syncfusion:DateTimeEdit Style="{StaticResource datetimeEdit}"
+                                                         DateTime="{Binding Path=Filter.From, Mode=TwoWay}" d:DateTime="01.01.2021"  MaxDateTime="{Binding Path=MaxDateTimeFrom, Mode=OneTime}"
+                                                         />
+                                <TextBlock Text="Till" Margin="15 0"  FontWeight="Light"  VerticalAlignment="Center"/>
+                                <Syncfusion:DateTimeEdit Style="{StaticResource datetimeEdit}" 
+                                                         DateTime="{Binding Path=Filter.Till, Mode=TwoWay}"  
+                                                         d:DateTime="07.01.2021 23:59:59" MaxDateTime="{Binding Path=MaxDateTimeTill, Mode=OneTime}"
+                                                         />
+                                <Syncfusion:ButtonAdv Width="24" Height="24"
+                                      VerticalAlignment="Center"  
+                                       ToolTip="Apply changes and reload data now..." Margin="15 0 0 0"
+                                       SmallIcon="/Resources/16/refresh.png" HorizontalAlignment="Left" 
+                                       Command="{Binding RefreshNow, IsAsync=true}"  
+                                       Grid.Column="1"
+                                      />
+                            </StackPanel>
+
+                            <TextBlock Grid.Row="2" Text="Include"  FontWeight="DemiBold" VerticalAlignment="Bottom" Margin="0,0,0,5" />
+                            <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="0,0,5,0">
+                                <TextBlock Text=": data"  FontWeight="Light" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <CheckBox Content="Port based attacks" IsChecked="{Binding Path=PortBasedAttacks}" d:IsChecked="True" Margin="10 0"  VerticalAlignment="Center" ToolTip="If checked the data and the report will include port based attacks if any where discovered"/>
+                                <CheckBox Content="Web based attacks" IsChecked="{Binding Path=WebBasedAttacks}" d:IsChecked="True" Margin="5 0"  VerticalAlignment="Center" ToolTip="If checked the data and the report will include web-based attacks if any where discovered"/>
+
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
+                                <TextBlock Text=": charts"  FontWeight="Light" VerticalAlignment="Center"/>
+                                <CheckBox x:Name="cbTimeLine" Content="Time-Line violations per IP address" IsChecked="{Binding Path=ReportSettings.GenerateTimeLine}" d:IsChecked="True" Margin="10 0"  VerticalAlignment="Center" ToolTip="Include time-line on abuse overview for each IP address"/>
+                                <CheckBox x:Name="cbActivity" Content="Activity requests and violations for whole ISP" IsChecked="{Binding Path=ReportSettings.GenerateActivity}" d:IsChecked="True" Margin="15 0"  VerticalAlignment="Center" ToolTip="Include activity in management abstract"/>
+                            </StackPanel>
+                            <TextBlock Text="Chapters" Grid.Row="4"  FontWeight="DemiBold" VerticalAlignment="Center"/>
+                            <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal">
+                                <TextBlock Text=": Include" FontWeight="Light" VerticalAlignment="Center"/>
+                                <CheckBox Content="Cover" 
+                                          IsChecked="{Binding Path=ReportSettings.GenerateCover}" 
+                                         d:IsChecked="True"
+                                          Margin="4 0"  
+                                          VerticalAlignment="Center" ToolTip="The report will include cover, you can replace the cover.png image with your own"/>
+
+                                <CheckBox Content="Cover letter" 
+                                          IsChecked="{Binding Path=ReportSettings.GenerateCoverLetter}" d:IsChecked="True"
+                                          Margin="4 0"  
+                                          VerticalAlignment="Center" ToolTip="The report will include cover letter"/>
+
+                                <CheckBox Content="Table of Content" 
+                                          IsChecked="{Binding Path=ReportSettings.GenerateIndex}" d:IsChecked="True"
+                                          Margin="4 0"  
+                                          VerticalAlignment="Center" ToolTip="The report will include Table of content"/>
+
+                                <CheckBox  Content="Management overview" 
+                                           IsChecked="{Binding Path=ReportSettings.GenerateManagementAbstract}" d:IsChecked="True" 
+                                           Margin="5 0"  
+                                           VerticalAlignment="Center" 
+                                           ToolTip="The report will include a management overview of detected incidents after the index"/>
+                                <CheckBox  Content="Used modules" 
+                                           IsChecked="{Binding Path=ReportSettings.IncludeUsedModules}" d:IsChecked="True"
+                                           Margin="5 0"  
+                                           VerticalAlignment="Center" 
+                                           ToolTip="The report will include the modules used in the detection (do not include this in external reports to possible complicit ISP's)"/>
+                                <CheckBox  Content="Incidents per IP address" IsChecked="{Binding Path=ReportSettings.GenerateMalicousActivityOverview}" d:IsChecked="True"
+                                      
+                                           VerticalAlignment="Center"
+                                           ToolTip="The report will include summery of abuse data per IP address"/>
+                            </StackPanel>
+
+
+
+
+                        </Grid>
+                    </Border>
+
+                </Grid>
+            </Expander>
+
+        </Grid>
+        <Grid Grid.Row="1">
+            <ScrollViewer
+                      HorizontalAlignment="Left"                       
+                      VerticalAlignment="Top"
+                      >
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Row="0" Grid.ColumnSpan="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" MaxWidth="100"/>
+                            <ColumnDefinition Width="auto" MaxWidth="5"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Margin="0 15 0 5" TextWrapping="WrapWithOverflow">
+                        <Run Text="Report cover letter configuration" FontWeight="DemiBold" FontSize="14" />
+                        <LineBreak/>
+                        <Run Text="You can configure the items you would like to render in the report using the this data selector, the items you select will be included in this report as well as be recorded in the security reports like SOC2 and ENISA reports &amp; exports"/>
+                        </TextBlock>
+
+
+                        <Syncfusion:SfBusyIndicator x:Name="BusyBee" IsBusy="{Binding IsBusy, Mode=OneWay}" 
+                                  AnimationType="Cupertino" Foreground="{StaticResource Gray0}" Grid.Column="2"
+                                  HorizontalAlignment="Center" IsManipulationEnabled="True">
+                            <Syncfusion:SfBusyIndicator.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock x:Name="BusyText" Text="{Binding Path=LoadingProgress,Mode=OneWay}"
+                                       TextAlignment="Center" Margin="0,10,0,10" FontSize="20" 
+                                       HorizontalAlignment="Stretch" TextWrapping="Wrap" 
+                                       Foreground="{StaticResource Gray0}" FontWeight="Bold"  />                                    
+                                </DataTemplate>
+                            </Syncfusion:SfBusyIndicator.HeaderTemplate>
+                        </Syncfusion:SfBusyIndicator>
+                        <!--Addressed to-->
+                        <TextBlock Text="Addressed to" Grid.Row="1" Margin="0 15 0 0" FontWeight="DemiBold" VerticalAlignment="Top"/>
+                        <TextBlock Text=":" Grid.Row="1" Grid.Column="1" VerticalAlignment="Top" Margin="0 15 0 0"/>
+                        <Grid Grid.Row="1" Grid.Column="2" Margin="0 15 0 0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Margin="5 0" TextWrapping="Wrap">
+                            <Run Text="ISP mailing label" FontWeight="DemiBold"/>
+                            <LineBreak/>
+                            <Run Text="This section contains the data of the to-be addressed entity that is expected to process the abuse report. This data was generated by the response of the WHOIS query of the company hosting the IP addresses. Making changes to the text will not update the WHOIS record on file."/>
+                            </TextBlock>
+                            <Controll:Hyperlink Grid.Row="1" 
+                                            Uri="{Binding Path=Report.ICAN}" 
+                                            Text="Click here if you would like to manually validate the raw data direct from the source" 
+                                            Margin="5 0 0 5" />
+
+                            <Grid Grid.Row="2" Margin="0 5 0 0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="149*"/>
+                                    <ColumnDefinition Width="413*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Organization"/>
+                                <Syncfusion:SfTextBoxExt Grid.Row="0" Grid.Column="1" Margin="5 0" Watermark="Management company name"
+                                 Text="{Binding Path=Report.ISPOrganisation, Mode=TwoWay}"
+                                 TextWrapping="Wrap" AcceptsReturn="True" />
+
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Address" Margin="0 5"/>
+                                <Syncfusion:SfTextBoxExt Grid.Row="1" Grid.Column="1" Margin="5 5"  Watermark="Address of the management"
+                                 Text="{Binding Path=Report.ISPAddress, Mode=TwoWay}"
+                                 TextWrapping="Wrap" AcceptsReturn="True" />
+                                <TextBlock Grid.Row="2" Grid.Column="0" Text="Email"/>
+                                <Syncfusion:SfTextBoxExt Grid.Row="3" Grid.Column="1" Margin="5 0" Watermark="Abuse email of the manegment company"
+                                 Text="{Binding Path=Report.AbuseEmail, Mode=TwoWay}"
+                                 TextWrapping="Wrap" AcceptsReturn="True" />
+
+
+                            </Grid>
+                        </Grid>
+                        <TextBlock Grid.Row="2" Text="CC" Margin="0 25 0 0" FontWeight="DemiBold" Width="100"/>
+
+                        <TextBlock Text=":" Grid.Column="1" Grid.Row="2"  Margin="0 25 0 0"/>
+                        <Grid Grid.Column="2" Grid.Row="2" Margin="0 25 0 0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto" MaxHeight="450"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Margin="5 0 0 10" TextWrapping="Wrap">
+                        <Run Text="Carbon copy" FontWeight="DemiBold"/>
+                        <LineBreak/>
+                        <Run Text="This section will may contain any additional addresses provided by the WHOIS query for the ISP. These addresses may include system administrators any other addresses that have been detected, the report allows for up to 3 items to be selected. Making changes to the text will not update the WHOIS record on file"/>
+                            </TextBlock>
+
+                            <ItemsControl ItemsSource="{Binding Path=Report.Contacts}" HorizontalAlignment="Left"
+                                      d:ItemsSource="{StaticResource ResourceKey=contacts}" 
+                                     Grid.Row="1" >
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="5 0">
+                                            <Expander IsExpanded="{Binding IsSelected,Mode=OneTime}" d:IsEnabled="True" ToolTip="Expand to view details">
+                                                <Expander.Header>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Margin="5 0">
+                                                        <Run Text="Include"/>
+                                                        <Run Text="{Binding Name,Mode=OneWay}" FontWeight="DemiBold"/>
+                                                        <Run Text="in report"/>
+                                                        </TextBlock>
+                                                        <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}" ToolTip="Select the item to include the address in the report"/>
+                                                    </StackPanel>
+
+                                                </Expander.Header>
+
+
+                                                <Grid Width="195" Margin="5 0 15 0">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition/>
+                                                        <RowDefinition/>
+                                                        <RowDefinition/>
+                                                        <RowDefinition/>
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="43"/>
+                                                        <ColumnDefinition Width="12"/>
+                                                        <ColumnDefinition Width="150"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="Name"/>
+                                                    <TextBlock Text=":" Grid.Column="1" />
+                                                    <TextBox Text="{Binding Name,Mode=TwoWay}" TextWrapping="Wrap" Grid.Row="0" Grid.Column="2"/>
+                                                    <TextBlock Text="Address" Grid.Row="1"/>
+                                                    <TextBlock Text=":" Grid.Row="1" Grid.Column="1" />
+                                                    <TextBox Text="{Binding Address,Mode=TwoWay}" TextWrapping="Wrap" Grid.Row="1" Grid.Column="2"/>
+                                                    <TextBlock Text="Email" Grid.Row="2"/>
+                                                    <TextBlock Text=":" Grid.Row="2" Grid.Column="1"/>
+                                                    <TextBox Text="{Binding EMail,Mode=TwoWay}"  Grid.Row="2" Grid.Column="2"/>
+                                                    <TextBlock Text="Type" Grid.Row="3"/>
+                                                    <TextBlock Text=":" Grid.Row="3" Grid.Column="1"/>
+                                                    <TextBlock Text="{Binding WhoisContactType}" Grid.Row="3" Grid.Column="2"/>
+
+                                                </Grid>
+                                            </Expander>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </Grid>
+                        <!--Reference-->
+                        <TextBlock Text="Reference" Grid.Row="3" Grid.Column="0"  Margin="0 25 0 0" FontWeight="DemiBold"/>
+                        <TextBlock Text=":" Grid.Column="1" Grid.Row="3"  Margin="0 25 0 0"/>
+                        <Grid Grid.Row="3" Grid.Column="2" Margin="0 25 0 0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto" MaxHeight="450"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Margin="5 0 0 10" TextWrapping="Wrap">
+                        <Run Text="Reference section" FontWeight="DemiBold"/>
+                        <LineBreak/>
+                        <Run Text="The report cover letter will contain these reference and regarding text. The reference is auto generated and is based on the name assigned to the WHOIS Internet service provider"/>
+                            </TextBlock>
+
+                            <Grid Grid.Row="1" Margin="0 15 0 0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Our reference" Margin="5 0"/>
+                                <Syncfusion:SfTextBoxExt Grid.Row="0" MaxWidth="699.3" Grid.Column="1" Text="{Binding Path=Report.Reference, Mode=TwoWay}" Watermark="Reference number for the abuse report" Margin="5,0,0,23" MaxLength="300" MaxLines="1" HorizontalAlignment="Left" Grid.RowSpan="2" Width="700" />
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Regarding" Margin="5 5 0 0"/>
+                                <Syncfusion:SfTextBoxExt Grid.Row="1" Grid.Column="1" Text="{Binding Path=Report.Regarding, Mode=TwoWay}" Width="700" Watermark="a regrading one-liners stating what the abuse is about" Margin="5 5 0 0" MaximumSuggestionsCount="1" MaxLines="1" MaxWidth="700" HorizontalAlignment="Left" />
+                            </Grid>
+                        </Grid>
+                    </Grid>
+
+
+
+                    <!--Introduction-->
+
+                    <TextBlock Grid.Row="2" Text="Intro" VerticalAlignment="Top" Width="100"  Margin="0 25 0 0" FontWeight="DemiBold"/>
+                    <TextBlock Text=":" Grid.Row="2" Grid.Column="1"  Margin="0 25 0 0"/>
+                    <Grid Grid.Row="2" Grid.Column="2"  Margin="0 25 0 0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto" MaxHeight="450"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Margin="5 0 0 5" TextWrapping="Wrap">
+                        <Run Text="Cover letter" FontWeight="DemiBold"/>
+                        <LineBreak/>
+                        <Run Text="The below text block allows you to customize the cover letter that will be generated in the report."/>
+                        </TextBlock>
+
+                        <Syncfusion:SfTextBoxExt Text="{Binding Path=Report.Note}"  Grid.Row="1"
+                                         
+                                         HorizontalAlignment="Stretch" 
+                                         d:Text="dear sir/madam
+                                         We like to bring to your attention" 
+                                         VerticalAlignment="Top" 
+                                         TextWrapping="Wrap"
+                                         AcceptsReturn="True"             
+                                         Margin="5"
+                                         MinLines="5"
+                                         Watermark="Introduction text used in the header of the report"
+                                         />
+
+                    </Grid>
+
+                    <TextBlock Text="Abuse detected" Grid.Row="4" Margin="0 25 0 0" FontWeight="DemiBold" VerticalAlignment="Top"/>
+                    <TextBlock Text=":" Grid.Row="4" Grid.Column="1" Margin="0 25 0 0" VerticalAlignment="Top"/>
+
+                    <TextBlock Grid.Row="3" Text="Signature" Width="100"  Margin="0 25 0 0" FontWeight="DemiBold" VerticalAlignment="Top"/>
+                    <TextBlock Text=":" Grid.Row="3" Grid.Column="1"  Margin="0 25 0 0"/>
+                    <Grid Grid.Row="3"  Grid.Column="2" Margin="0 25 0 0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock  Grid.ColumnSpan="2"  Margin="5 0 0 0">
+                        <Run Text="Sign the report using the following name"  FontWeight="DemiBold"/>
+                        <LineBreak/>
+                        <Run Text="Signing the cover letter allows you to add a way to distinct the responsible person that can be used a reference contact by the parties receiving the abuse report."/>
+                        </TextBlock>
+                        <TextBlock Text="Name" Grid.Row="1" Margin="5 5 0 0"/>
+                        <Syncfusion:SfTextBoxExt Text="{Binding Path= ReportSettings.SignatureName}" HorizontalAlignment="Left" Width="400" Watermark="name to appear on cover letter" Margin="5 5 0 0" Grid.Column="1"  Grid.Row="1"/>
+                        <TextBlock Text="Department" Grid.Row="2" Margin="5 5 0 0"/>
+                        <Syncfusion:SfTextBoxExt Text="{Binding Path= ReportSettings.SignatureDepartment}" HorizontalAlignment="Left" Width="400" Watermark="department to place under the name" Grid.Column="1" Margin="5 5 0 0" Grid.Row="2"/>
+
+                    </Grid>
+
+
+                    <Grid Grid.Row="4" Grid.Column="2" Margin="0 25 0 0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto" MaxHeight="450"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel  Margin="5 0 0 10">
+                            <TextBlock>
+                        <Run Text="IP addresses to report on" FontWeight="DemiBold"/>
+                        <LineBreak/>
+                        <Run Text="The below grid contain all the IP addresses that have 1 ore more incidents reported against them in the above specified time range. By changing the Included check you can include or exclude the IP address in the report."/>
+                            </TextBlock>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox Content="Include/ exclude all IP addresses" 
+                                      IsChecked="{Binding Path=Report.Audit.IncludeAllIpAddresses}" 
+                                      Margin="0 5 0 0"
+                                      ToolTip="Change if you would like to include or exclude all data, sometimes useful if you would only like to report single entries"
+                                      />
+                            </StackPanel>
+                        </StackPanel>
+                        <Syncfusion:SfDataGrid AutoGenerateColumns="False"
+                              HorizontalAlignment="Stretch" 
+                              IsReadOnly="False" Grid.Row="1"
+                              AllowFiltering="True"
+                              ItemsSource="{Binding Path=PagedSource, ElementName=sfDataPager}"
+                              ScrollMode="Async"
+                              NavigationMode="Row" ColumnSizer="Star" >
+                            <Syncfusion:SfDataGrid.Columns>
+                                <Syncfusion:GridCheckBoxColumn HeaderText="Include" MappingName="Report" IsReadOnly="False" AllowEditing="True" />
+                                
+                                <Syncfusion:GridTextColumn HeaderText="IP Address" MappingName="IPAddress" IsReadOnly="True"/>
+                                <Syncfusion:GridNumericColumn HeaderText="Port Attacks" MappingName="PortBasedAttacksCount" IsReadOnly="True" NumberDecimalDigits="0"/>
+                                <Syncfusion:GridNumericColumn HeaderText="Http Attacks" MappingName="WebBasedAttacksCount" IsReadOnly="True" NumberDecimalDigits="0"/>
+                                <Syncfusion:GridNumericColumn HeaderText="Exploits" MappingName="TotalExploitsDetected" IsReadOnly="True" NumberDecimalDigits="0"/>
+                                <Syncfusion:GridDateTimeColumn HeaderText="Started" MappingName="TimePeriodStarts" IsReadOnly="True" Pattern="LongDate">
+                                    <Syncfusion:GridDateTimeColumn.DateTimeFormat>
+                                        <global:DateTimeFormatInfo LongDatePattern="ddd dd MMM yyyy hh:mm:ss"/>
+                                    </Syncfusion:GridDateTimeColumn.DateTimeFormat>
+                                </Syncfusion:GridDateTimeColumn>
+                                <Syncfusion:GridDateTimeColumn HeaderText="Ended" MappingName="TimePeriodEnds" IsReadOnly="True" Pattern="LongDate">
+                                    <Syncfusion:GridDateTimeColumn.DateTimeFormat>
+                                        <global:DateTimeFormatInfo LongDatePattern="ddd dd MMM yyyy hh:mm:ss"/>
+                                    </Syncfusion:GridDateTimeColumn.DateTimeFormat>
+                                </Syncfusion:GridDateTimeColumn>
+                            </Syncfusion:SfDataGrid.Columns>
+                        </Syncfusion:SfDataGrid>
+                        <Border Grid.Row="1" Grid.Column="1" Background="{StaticResource Gray7}">
+                            <Syncfusion:SfDataPager Orientation="Vertical" 
+                                            x:Name="sfDataPager"
+                                            VerticalAlignment="Top" 
+                                            HorizontalAlignment="Right" NumericButtonCount="10" PageSize="100" 
+                                            Source="{Binding Path= Report.Audit.Data}"
+                                            />
+                        </Border>
+                    </Grid>
+
+                </Grid>
+
+
+            </ScrollViewer>
+        </Grid>
+        <Grid Grid.Row="2" Margin="5"  >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="164"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Command="{Binding DlgCommand}" Content="Close" Width="64" Grid.Column="0"/>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                <CheckBox IsChecked="{Binding Path=ReportSettings.MakeWebLink}" 
+                          Content="Upload PDF to website" 
+                          ToolTip="Will be uploaded to your own domain using the administration controller via the site's firewall settings"
+                          Margin="0 5 25 0"
+                          Visibility="{Binding MakeWebLinkEnabled, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                <Syncfusion:ButtonAdv Content="ButtonAdv" Label="Save" Margin="16,0,0,0" Width="75" ToolTip="Save the abuse report to disk as text"
+                                       SmallIcon="/Resources/24/NotePad.png" HorizontalAlignment="Left" 
+                                      Command="{Binding GenerateTXT}"  Visibility="Collapsed"
+                                      />
+                <Syncfusion:ButtonAdv Content="ButtonAdv" Label="Save" Margin="16,0,0,0" Width="75" ToolTip="Save the abuse report to disk as PDF"
+                                       SmallIcon="/Resources/24/PDF.png" HorizontalAlignment="Left" 
+                                      Command="{Binding GeneratePDF, IsAsync=True}"  
+                                      Visibility="{Binding ShowGeneratePdf, Mode=OneTime, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                                      />
+                <Syncfusion:ButtonAdv Content="ButtonAdv" Label="Preview" Margin="16,0,0,0" Width="75" ToolTip="Preview &amp; Edit the abuse report"
+                                       SmallIcon="/Resources/24/document_view.png" HorizontalAlignment="Left" 
+                                      Command="{Binding PreviewPdf}"
+                                      />
+
+                <Syncfusion:ButtonAdv Content="ButtonAdv" Label="Export" Margin="16,0,0,0" Width="75" ToolTip="Preview &amp; Edit the abuse report"
+                                       SmallIcon="/Resources/24/document_out.png" HorizontalAlignment="Left" 
+                                      Command="{Binding ExportToDisk}" Visibility="Collapsed"
+                                      />
+
+            </StackPanel>
+
+
+        </Grid>
+    </Grid>
+</UserControl>

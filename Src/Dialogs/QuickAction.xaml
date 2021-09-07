@@ -1,0 +1,393 @@
+﻿<UserControl x:Class="Desktop.Dialogs.QuickAction"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"     
+             xmlns:converters="clr-namespace:Desktop.Converters"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:Syncfusion="http://schemas.syncfusion.com/wpf"
+             xmlns:dialogs="clr-namespace:Desktop.Dialogs" 
+             xmlns:model="clr-namespace:Desktop.Model;assembly=Desktop.Model"
+             xmlns:bom="clr-namespace:Walter.BOM;assembly=Walter.BOM"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DataContext="{d:DesignInstance Type=dialogs:QuickActionViewModel}"
+             mc:Ignorable="d" 
+             Height="640" Width="980" Background="White"
+             >
+    <prism:Dialog.WindowStyle>
+        <Style TargetType="Window">
+            <Setter Property="prism:Dialog.WindowStartupLocation" Value="CenterScreen" />
+            <Setter Property="ResizeMode" Value="NoResize"/>
+            <Setter Property="ShowInTaskbar" Value="False"/>
+            <Setter Property="SizeToContent" Value="WidthAndHeight"/>
+        </Style>
+    </prism:Dialog.WindowStyle>
+    
+    <UserControl.Resources>
+
+        <converters:RadioBoolToIntConverter  x:Key="radioBoolToIntConverter" />
+        <converters:ComparisonConverter  x:Key="ComparisonConverter" />
+        <Style x:Key="GetData" TargetType="{x:Type Button}">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="5 0"/>
+            <Setter Property="ToolTip" Value="Query the firewall"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid>
+                            <Image Source="/resources/16/unknown.png" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Cursor" Value="Hand"/>
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="SendMail" TargetType="{x:Type Button}">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="5 0"/>
+            <Setter Property="ToolTip" Value="Send abuse report"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid>
+                            <Image Source="/resources/24/PDF.png" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Cursor" Value="Hand"/>
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="bom:ResponceExpected"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </UserControl.Resources>
+
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="42"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Margin="5"  Grid.Row="0">
+            <TextBlock  Style="{StaticResource Header1}" Margin="5,0,0,5">
+                <Run Text="Firewall Security Action for"/>                
+                <Run Text="{Binding SelectedType, Mode=OneWay}" />
+
+            </TextBlock>
+            <TextBlock Margin="5,0,0,5" >
+                <Run Text="{Binding Capebilities, Mode=OneWay}"/>
+                <Run Text="Click in the (?) icon to query the firewall for more details on specific properties on the"/>
+                <Run Text="{Binding SelectedType, Mode=OneWay}"/>
+            </TextBlock>
+            <TextBlock Margin="5 0" TextWrapping="Wrap" Text="Setting the block status for Geography and especially ISP will delay response as the website as the firewall will need to validate that the user is not coming from a blocked location" />
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid>
+
+
+                <Grid >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" x:Name="rowHeader"/>
+                        <RowDefinition Height="auto" x:Name="rowGeography"/>
+                        <RowDefinition Height="auto" x:Name="rowGeographyHelp"/>
+                        <RowDefinition Height="auto" x:Name="rowUser"/>
+                        <RowDefinition Height="auto" x:Name="rowUserHelp"/>
+                        <RowDefinition Height="auto" x:Name="rowIP"/>
+                        <RowDefinition Height="auto" x:Name="rowIPHelp"/>
+                        <RowDefinition Height="auto" x:Name="rowISP"/>
+                        <RowDefinition Height="auto" x:Name="rowISPHelp"/>
+                        <RowDefinition Height="auto" x:Name="rowDate"/>
+
+
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition MinWidth="150"/>
+                        <ColumnDefinition Width="auto" MinWidth="50"/>
+                        <ColumnDefinition Width="auto" MinWidth="16"/>
+                        <ColumnDefinition Width="auto" MinWidth="190"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="1" Grid.Row="0" Text="value" FontWeight="DemiBold" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Column="3" Grid.Row="0" Text="option" FontWeight="DemiBold" HorizontalAlignment="Center"/>
+
+                    <!--Geography Row 1-->
+                    <TextBlock Grid.Row="1" Visibility="{Binding GeoEnabled, Mode=OneWay}" Text="Geography" FontWeight="Bold" Margin="5" />
+                    <TextBlock Grid.Row="2" Visibility="{Binding GeoEnabled, Mode=OneWay}" Margin="5 0 0 0" TextWrapping="Wrap" Text="You need to ensure that you use have a geo-provider configured for the firewall." FontWeight="ExtraLight" FontSize="10"/>
+
+
+                    <TextBlock  Grid.Row="1" Grid.Column="1" Visibility="{Binding GeoEnabled, Mode=OneWay}" VerticalAlignment="Center"
+                            Text="{Binding Location, Mode=OneWay}" d:Text="Germany" ToolTip="The country the request originated from" />
+                    <Button   Grid.Row="1" Grid.Column="2" Command="{Binding GetCountry, IsAsync=True}" 
+                          Style="{StaticResource GetData}"  ToolTip="Get country details from firewall" />
+
+
+                    <StackPanel Grid.Row="1" Grid.Column="3" Orientation="Horizontal" Margin="5" VerticalAlignment="Center">
+                        <RadioButton IsChecked="{Binding Path=GeographyBlockFeature, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static model:BlockFeature.NotSet}}" Content="No Action" GroupName="Geography"  />
+                        <RadioButton IsChecked="{Binding Path=GeographyBlockFeature, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static model:BlockFeature.Block}}" Content="Block" Margin="5 0" GroupName="Geography" />
+                        <RadioButton IsChecked="{Binding Path=GeographyBlockFeature, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static model:BlockFeature.UnBlock}}" Content="Allow" GroupName="Geography" />
+                    </StackPanel>
+                    <TextBlock Grid.Row="2" Grid.Column="3" ToolTip="The date the geography is blocked till">
+                        <Run Text="Blocked till:"/>
+                        <Run Text="{Binding Path=GeograhyBlockedTill, Mode=OneWay}"/>
+                    </TextBlock>
+
+                    <!--User Row 2-->
+
+                    <TextBlock Grid.Row="3" Visibility="{Binding UserEnabled, Mode=OneWay}" Text="User" FontWeight="Bold" Margin="5,15,0,0" VerticalAlignment="Center" />
+                    <TextBlock Grid.Row="4" Visibility="{Binding UserEnabled, Mode=OneWay}" Margin="5 0 0 0" TextWrapping="Wrap" Text="You can decide to configure the access the firewall user has. Firewall user management is not related to any user-management you might have in your application" FontWeight="ExtraLight" FontSize="10"/>
+
+                    <TextBlock  Grid.Row="3" Grid.Column="1"  Visibility="{Binding UserEnabled, Mode=OneWay}"   Text="{Binding UserId, Mode=OneWay}" d:Text="15525" Margin="5 15 0 0 " VerticalAlignment="Center" ToolTip="Proprietary firewall assigned identifier assigned to the user." />
+                    <Button  Grid.Row="3" Grid.Column="2" Command="{Binding GetUser, IsAsync=True}" Visibility="{Binding UserEnabled, Mode=OneWay}" Style="{StaticResource GetData}"  ToolTip="Get user details from firewall" />
+
+
+                    <StackPanel Grid.Row="3" Grid.Column="3" Orientation="Horizontal" Margin="5 15 0 0 " VerticalAlignment="Center" Visibility="{Binding UserEnabled, Mode=OneWay}">
+                        <RadioButton IsChecked="{Binding Path=UserBlockFeature , Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static model:BlockFeature.NotSet}}" Content="No Action" GroupName="UserBlockFeature"  />
+                        <RadioButton IsChecked="{Binding Path=UserBlockFeature, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static model:BlockFeature.Block}}" Content="Block" Margin="5 0" GroupName="UserBlockFeature" />
+                        <RadioButton IsChecked="{Binding Path=UserBlockFeature, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static model:BlockFeature.UnBlock}}" Content="Allow" GroupName="UserBlockFeature" />
+                    </StackPanel>
+                    <TextBlock Grid.Row="4" Grid.Column="3"  Visibility="{Binding UserEnabled, Mode=OneWay}" ToolTip="The date the user is currently blocked till" >
+                        <Run Text="Blocked till:"/>
+                        <Run Text="{Binding Path=UserBlockedTill, Mode=OneWay}" />
+                    </TextBlock>
+
+
+                    <!--IP Row 3-->
+
+                    <TextBlock Grid.Row="5" Visibility="{Binding IPEnabled, Mode=OneWay}" Text="IP Address" FontWeight="Bold" Margin="5 15 0 0" VerticalAlignment="Center" />
+                    <TextBlock Grid.Row="6" Visibility="{Binding IPEnabled, Mode=OneWay}" Margin="5 0 0 0" TextWrapping="Wrap" Text="You can decide to configure the access for a IP address irrespective of the user." FontWeight="ExtraLight" FontSize="10"/>
+
+                    <TextBlock  Grid.Row="5" Grid.Column="1"  Visibility="{Binding IPEnabled, Mode=OneWay}"   Text="{Binding IPAddress, Mode=OneWay}" d:Text="12.25.11.22" Margin="5 15 0 0" VerticalAlignment="Center" ToolTip="Proprietary firewall assigned identifier assigned to the user." />
+                    <Button  Grid.Row="5" Grid.Column="2" Command="{Binding GetIP, IsAsync=True}" Visibility="{Binding IPEnabled, Mode=OneWay}" Style="{StaticResource GetData}"  ToolTip="Get IP Address details from firewall" />
+
+
+                    <StackPanel Grid.Row="5" Grid.Column="3" Orientation="Horizontal" Margin="5 15 0 0" VerticalAlignment="Center" Visibility="{Binding IPEnabled, Mode=OneWay}">
+                        <RadioButton IsChecked="{Binding Path=IPBlockFeature, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static model:BlockFeature.NotSet}}" Content="No Action" GroupName="IPBlockFeature"  />
+                        <RadioButton IsChecked="{Binding Path=IPBlockFeature, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static model:BlockFeature.Block}}" Content="Block" Margin="5 0" GroupName="IPBlockFeature" />
+                        <RadioButton IsChecked="{Binding Path=IPBlockFeature, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static model:BlockFeature.UnBlock}}" Content="Allow" GroupName="IPBlockFeature" />
+                    </StackPanel>
+                    <TextBlock Grid.Row="6" Grid.Column="3" Visibility="{Binding IPEnabled, Mode=OneWay}" ToolTip="The date the user is currently blocked till">
+                        <Run Text="Blocked till:"/>
+                        <Run Text="{Binding Path=IPBlockedTill, Mode=OneWay}"/>
+                    </TextBlock>
+
+
+                    <!--IP Row 4-->
+
+                    <TextBlock Grid.Row="7" Visibility="{Binding ISPEnabled, Mode=OneWay}" Text="Internet Service Provider" FontWeight="Bold" Margin="5 15 0 0" VerticalAlignment="Center" />
+                    <TextBlock Grid.Row="8" Visibility="{Binding ISPEnabled, Mode=OneWay}" Margin="5 0 0 0" TextWrapping="Wrap" Text="You can decide to configure the access for any user coming from an Internet service provider (ISP) irrespective of the IP address or user." FontWeight="ExtraLight" FontSize="10"/>
+
+                    <TextBlock  Grid.Row="7" Grid.Column="1"  Visibility="{Binding ISPEnabled, Mode=OneWay}"   Text="{Binding Path=ISPName, Mode=OneWay}" d:Text="15525" Margin="5 15 0 0" VerticalAlignment="Center" ToolTip="Proprietary firewall assigned identifier assigned to the user." />
+                    <Button  Grid.Row="7" Grid.Column="2" Command="{Binding GetISP, IsAsync=True}" Visibility="{Binding ISPEnabled, Mode=OneWay}" Style="{StaticResource GetData}"  ToolTip="Get ISP details from firewall" />
+
+
+                    <StackPanel Grid.Row="7"  Visibility="{Binding ISPEnabled, Mode=OneWay}" Grid.Column="3" Orientation="Horizontal" Margin="5 15 0 0" VerticalAlignment="Center" >
+                        <RadioButton IsChecked="{Binding Path=ISPBlockFeature , Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static model:BlockFeature.NotSet}}" Content="No Action" GroupName="ISPBlockFeature"  />
+                        <RadioButton IsChecked="{Binding Path=ISPBlockFeature, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static model:BlockFeature.Block}}" Content="Block" Margin="5 0" GroupName="ISPBlockFeature" />
+                        <RadioButton IsChecked="{Binding Path=ISPBlockFeature, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static model:BlockFeature.UnBlock}}" Content="Allow" GroupName="ISPBlockFeature" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="8" Grid.Column="3">
+                        <TextBlock  ToolTip="The date the user is currently blocked till">
+                        <Run Text="Blocked till:"/>
+                        <Run Text="{Binding Path=IPBlockedTill, Mode=OneWay}" />
+                        </TextBlock>
+                        <StackPanel Orientation="Horizontal" Visibility="{Binding AbuseReportVisible}">
+                            <TextBlock  FontWeight="DemiBold">
+                                <Run Text="Report:"/>
+                                <Run Text="{Binding Path=ISPAbuseMail, Mode=OneWay}"/>
+                            </TextBlock>
+                            <Button Style="{StaticResource SendMail}" Command="{Binding GenerateAbuseReport, IsAsync=True}" Width="16" Height="16" ToolTip="Generate an abuse report"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <Syncfusion:TabControlExt Grid.Row="9" Margin="5 15" Grid.ColumnSpan="4" Height="375">
+                        <Syncfusion:TabItemExt Header="Guard action">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition  Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="250"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.ColumnSpan="4" >
+                                    <Run Text="Block configurations" FontWeight="Bold" />
+                                    <LineBreak/>
+                                    <Run  Text="Configure the firewall to temporally block interaction with the user as well configure the location to block at"/>
+                                </TextBlock>
+   
+
+                                <TextBlock Text="Set Block date:" Grid.Row="1" Margin="5"/>
+                                <Syncfusion:SfDatePicker Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" AllowNull="False" Height="23" Value="{Binding BlockDate}" Watermark="Pick a date" Width="120" Margin="5"/>
+
+                                <TextBlock Text="Block location" Grid.Row="2" Margin="5" />
+                                <Syncfusion:CheckListBox Grid.Column="1" Grid.Row="2" Width="180" Margin="5" >
+                                    <Syncfusion:CheckListBoxItem Content="In Application"/>
+                                    <Syncfusion:CheckListBoxItem Content="In IIS (Application)"/>
+                                    <Syncfusion:CheckListBoxItem Content="In IIS (Server)"/>
+                                    <Syncfusion:CheckListBoxItem Content="External Firewall"/>
+                                    <Syncfusion:CheckListBoxItem Content="Active Directory"/>
+                                </Syncfusion:CheckListBox>
+                                <TextBlock Grid.Column="2" Grid.Row="2" Margin="15 0" TextWrapping="Wrap" Text="Although this feature is extremely powerfullWhen and allow the blocking access to the application outside of the application you might block more then intended."  Style="{StaticResource Muted}"/>
+
+                            </Grid>
+                        </Syncfusion:TabItemExt>
+                        <Syncfusion:TabItemExt Header="Guard response">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                <StackPanel>
+                                    <TextBlock Text="Auto-response options" FontWeight="Bold" Margin="5"/>
+                                    <TextBlock Grid.Column="0" Text="You can replay to requests with a specific payload altering the normal reply of your system. Please note that if your payload contains offensive capebilities to configure anti-virus exclusion on the ''App_Data\Payload'' folder on the server." TextWrapping="Wrap" Margin="5 0 15 0" />
+
+
+                                    <Grid Margin="5 15 0 0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto"/>
+                                            <ColumnDefinition Width="auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="File to upload:" Margin="5" Grid.Row="0" VerticalAlignment="Center"/>
+                                        <StackPanel Orientation="Horizontal" Margin="5" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center">
+
+                                            <Syncfusion:SfTextBoxExt x:Name="_fileName" Text="{Binding FileName}" MinWidth="300" IsReadOnly="True" Watermark="select one or more files to upload"/>
+                                            <Button Content="..."  Command="{Binding OpenFileCommand}" Margin="5,0,0,0" Width="24" ToolTip="Select .connect file to import"/>
+                                        </StackPanel>
+                                        <TextBlock Grid.Row="1" Text="Expires" Margin="5"/>
+                                        <Syncfusion:SfDatePicker Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" AllowNull="False" Height="23" Margin="5"
+                                                             Value="{Binding PayLoadDate}" Watermark="Pick a date" Width="120"
+                                                             MinDate="{Binding Path=MinDateTime,Mode=OneTime}"
+                                                             />
+
+                                        <TextBlock Grid.Row="2" Text="React to types:" Margin="5"/>
+                                        <Syncfusion:CheckListBox Grid.Row="2" Grid.Column="1" Margin="5"
+                                                             ItemsSource="{Binding PossibleResponceExpected, Mode=OneWay}"  SelectedItems="{Binding SelectedResponce}"
+                                                             MaxHeight="100"
+                                                             />
+
+                                        <Button Grid.Column="1" Grid.Row="3" Content="Add" Width="64" HorizontalAlignment="Left" Margin="0 5 0 15" Command="{Binding AddPayload}"/>
+
+                                        <TextBlock Text="Payload" Grid.Row="4" VerticalAlignment="Top" Margin="5"/>
+                                        <ListView Grid.Row="4" Grid.Column="1" ItemsSource="{Binding Path=PayLoads,Mode=OneWay}" Margin="5">
+
+                                            <ListView.View>
+                                                <GridView>
+                                                    <GridViewColumn Header="File Name" Width="120" DisplayMemberBinding="{Binding FileName}"  />
+                                                    <GridViewColumn Header="Response Filter" Width="120" DisplayMemberBinding="{Binding Responce}">
+                                                        <GridViewColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <Syncfusion:CheckListBox ItemsSource="{Binding Path=Responce}" >
+
+                                                                </Syncfusion:CheckListBox>
+                                                            </DataTemplate>
+                                                        </GridViewColumn.CellTemplate>
+                                                    </GridViewColumn>
+                                                    <GridViewColumn Header="Option" Width="120" DisplayMemberBinding="{Binding AssignTo}"/>
+
+
+                                                </GridView>
+                                            </ListView.View>
+                                        </ListView>
+                                    </Grid>
+                                </StackPanel>
+
+                            </ScrollViewer>
+                        </Syncfusion:TabItemExt>
+                    </Syncfusion:TabControlExt>
+
+
+                </Grid>
+
+            </Grid>
+
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Style="{StaticResource Header3}" d:Text="Item Name">
+                        <Run Text="{Binding SelectedType, Mode=OneWay}" /> 
+                        <Run Text="{Binding ViewingTypeTitle, Mode=OneWay}"/>
+                    </TextBlock>
+
+                    <Button Height="16"  Grid.Row="1" Grid.Column="2" Command="{Binding BackToSelectedItem}" 
+                          Style="{StaticResource GetData}"  ToolTip="Revert to the original/ initial object" />
+                </StackPanel>
+
+                <Syncfusion:PropertyGrid Grid.Row="1" x:Name="pg" 
+                                 SelectedObject="{Binding SelectedPropertyGridItem}" 
+                                 DescriptionPanelVisibility = "Collapsed" 
+                                 EnableToolTip="False"                                 
+                                 PropertyExpandMode="NestedMode" 
+                                 SelectedPropertyItemChanged="PropertyGrid_SelectedPropertyItemChanged" 
+                                         CollectionEditorOpening="OnPropertyGridCollectionOpened"
+                                 >
+                    <Syncfusion:PropertyGrid.DescriptionTemplate>
+                        <DataTemplate>
+                            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding DisplayName, Mode=OneWay}" FontSize="16" TextWrapping="Wrap"/>
+                                    <TextBox Background="Transparent" BorderThickness="0" Text="{Binding Description, Mode=OneWay}" IsReadOnly="True"  TextWrapping="Wrap" />
+                                    <!--<Controll:Hyperlink Text="{Binding MoreInfoText, Mode=OneWay}" Uri="{Binding MoreInfoLink, Mode=OneWay}" />-->
+                                </StackPanel>
+                            </ScrollViewer>
+                        </DataTemplate>
+                    </Syncfusion:PropertyGrid.DescriptionTemplate>
+                </Syncfusion:PropertyGrid>
+
+
+
+            </Grid>
+            <Syncfusion:SfGridSplitter Name="gridSplitter" ShowsPreview="True"
+                                   HorizontalAlignment="Stretch" 
+                                   ResizeBehavior="PreviousAndNext"
+                                   Width="auto" EnableCollapseButton="True"
+                                   Grid.Column="1">
+            </Syncfusion:SfGridSplitter>
+
+
+        </Grid>
+
+        <StackPanel Margin="5" Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center">
+            <Button Content="Apply" Command="{Binding DlgCommand, Mode=OneWay}"  CommandParameter="OK" Width="64" Height="32" Margin="0,0,5,0"/>
+
+            <Button Content="Cancel" Command="{Binding CancelDlgCommand, Mode=OneWay}"  CommandParameter="Cancel" Width="64" Height="32" Margin="5,0"/>
+
+        </StackPanel>
+    </Grid>
+</UserControl>

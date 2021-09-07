@@ -1,0 +1,21 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <SolidColorBrush x:Key="Gray0">#1d3258</SolidColorBrush>
+    <SolidColorBrush x:Key="Gray1">#253f6d</SolidColorBrush>
+    <SolidColorBrush x:Key="Gray2">#465b83</SolidColorBrush>
+    <SolidColorBrush x:Key="Gray3">#687a9a</SolidColorBrush>
+    <SolidColorBrush x:Key="Gray4">#8a98b0</SolidColorBrush>
+    <SolidColorBrush x:Key="Gray5">#aab4c6</SolidColorBrush>
+    <SolidColorBrush x:Key="Gray6">#ccd2de</SolidColorBrush>
+    <SolidColorBrush x:Key="Gray7">#f1f2f5</SolidColorBrush>
+    <SolidColorBrush x:Key="Dark">#23272b</SolidColorBrush>
+    <SolidColorBrush x:Key="DarkHover">#212529</SolidColorBrush>    
+    
+    <SolidColorBrush x:Key="Blue1">#09327A</SolidColorBrush>
+    <SolidColorBrush x:Key="Blue2">#0C409D</SolidColorBrush>
+    <SolidColorBrush x:Key="Blue3">#1153C9</SolidColorBrush>
+
+    <SolidColorBrush x:Key="Red1">#FC9B000A</SolidColorBrush>
+    <SolidColorBrush x:Key="Red2">#FCD4000E</SolidColorBrush>
+    <SolidColorBrush x:Key="Red3">#FCFA0010</SolidColorBrush>
+</ResourceDictionary>

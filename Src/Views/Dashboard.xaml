@@ -1,0 +1,604 @@
+﻿<UserControl xmlns:Controlls="clr-namespace:Desktop.Core.Controlls"  x:Class="Desktop.Views.Dashboard"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:waf="http://asp-waf.com/2021/wpf"  
+             xmlns:prism="http://prismlibrary.com/" 
+             xmlns:converter="clr-namespace:Desktop.Converters"
+             xmlns:syncfusion="http://schemas.syncfusion.com/wpf" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:Desktop.ViewModels" 
+             d:DataContext="{d:DesignInstance Type=vm:DashboardViewModel}"
+             xmlns:model="clr-namespace:Desktop.Model.Desktop;assembly=Desktop.Model"
+             xmlns:controll="clr-namespace:Desktop.Authentication.Controll;assembly=Desktop.Authentication"
+             mc:Ignorable="d"
+             prism:ViewModelLocator.AutoWireViewModel="True">
+
+    <UserControl.Resources>
+        <Style x:Key="Refresh" TargetType="{x:Type Button}">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="5 0"/>
+            <Setter Property="ToolTip" Value="Send abuse report"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid>
+                            <Image Source="/resources/24/refresh.png" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Cursor" Value="Hand"/>
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="MalicousPin" TargetType="{x:Type Button}">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="5 0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid>
+                            <Image Source="/Resources/16/pin2_red.png" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Cursor" Value="Hand"/>
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="Pin" TargetType="{x:Type Button}">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="5 0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid>
+                            <Image Source="/Resources/16/pin2_green.png" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Cursor" Value="Hand"/>
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <converter:ToParentSizeConverter x:Key="fillConverter"/>
+        <DataTemplate x:Key="AttackerMarkerTemplate">
+            <Grid DataContext="{Binding Data}">
+
+                <Button Style="{StaticResource MalicousPin}" 
+                        Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.OpenMaliciousCounty}" 
+                        CommandParameter="{Binding Path=CountryCode}"                        
+                        >
+                    <Button.ToolTip>
+                        <StackPanel>
+                            <TextBlock Grid.Row="1">
+                            <Run Text="{Binding Path=MapLocation.Country}" FontWeight="DemiBold"/>
+                            <Run Text=":"/>
+                            <Run Text="{Binding Path=Count, StringFormat=N0}"/>
+                            <Run Text="incident(s)"/>
+                            </TextBlock>
+                            <TextBlock  Text="click to inspect"/>
+                        </StackPanel>
+                    </Button.ToolTip>
+                </Button>
+
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="VisitorMarkerTemplate">
+            <Grid DataContext="{Binding Data}">
+                <Button Style="{StaticResource Pin}" 
+                        Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}},Path=DataContext.OpenCounty}" 
+                        CommandParameter="{Binding Path=CountryCode}">
+                    <Button.ToolTip>
+                        <StackPanel>
+                            <TextBlock >
+                                <Run Text="{Binding Path=MapLocation.Country}" FontWeight="DemiBold"/>
+                                <Run Text=":"/>
+                                <Run Text="{Binding Path=Count, StringFormat=N0}"/>
+                                <Run Text="Visits(s)"/>
+                            </TextBlock>
+                            <TextBlock  Text="click to inspect"/>
+                        </StackPanel>
+                    </Button.ToolTip>
+                </Button>
+
+            </Grid>
+        </DataTemplate>
+        <Style TargetType="GroupBox">
+            <Setter Property="Height" Value="70"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+        <Style TargetType="Slider">
+            <Setter Property="Maximum" Value="60"/>
+            <Setter Property="Minimum" Value="1"/>
+            <Setter Property="TickPlacement" Value="Both"/>
+            <Setter Property="Width" Value="190"/>
+            <Setter Property="TickFrequency" Value="5"/>
+        </Style>
+
+        <Style TargetType="Button" >
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="2" />
+                </Style>
+            </Style.Resources>
+        </Style>
+
+    </UserControl.Resources>
+
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" CanContentScroll="True" >
+        <Grid Margin="10 0">
+            <Grid.RowDefinitions>
+
+                <RowDefinition Height="44"/>
+                <RowDefinition Height="90"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="2*"/>
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0" Padding="5"   Background="{StaticResource Dark}">
+
+
+                <StackPanel Orientation="Horizontal" Margin="5 0" >
+                    <Grid Margin="5 0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Orientation="Horizontal" Grid.Row="0">
+
+                            <TextBlock Text="{Binding Path=ServerTime.Hour, Mode=OneWay, StringFormat=D2}" d:Text="01" FontSize="12" Background="Black" Padding="2 0" Margin="0 0 2 0" Foreground="{StaticResource Gray7}"/>
+                            <TextBlock Text="{Binding Path=ServerTime.Minute, Mode=OneWay, StringFormat=D2}" d:Text="01" FontSize="12" Background="Black"  Padding="2 0"  Margin="0 0 2 0" Foreground="{StaticResource Gray7}"/>
+                            <TextBlock Text="{Binding Path=ServerTime.Second, Mode=OneWay, StringFormat=D2}" d:Text="01" FontSize="12" Background="Black"  Padding="2 0"  Foreground="{StaticResource Gray7}"/>
+                        </StackPanel>
+                        <TextBlock Text="{Binding Path=ServerCountry}" d:Text="Belgium"   
+                                FontSize="12"   Grid.Row="1" 
+                                Foreground="{StaticResource Gray7}" 
+                                ToolTip="{Binding Path=ServerTimeZone.DisplayName}"/>
+
+                    </Grid>
+
+                    <TextBlock Visibility="Collapsed" Text="Firewall license:" Style="{StaticResource Header1}" Foreground="{StaticResource Gray6}"/>
+                    <TextBlock Visibility="Collapsed"  Text="{Binding LicenseStatus, Mode=OneWay}" Style="{StaticResource Header1}" 
+                           Foreground="{StaticResource  Gray7}" d:Text="License pending" Margin="5 0" ToolTip="The license status of the firewall"/>
+
+                    <TextBlock Visibility="Collapsed"  Text="-" Style="{StaticResource Header1}" Foreground="{StaticResource Gray6}" Margin="15 0"/>
+
+                    <TextBlock Text="Application Up-Time:" Style="{StaticResource Header1}" Foreground="{StaticResource Gray6}"/>
+                    <TextBlock Text="{Binding UpTime, Mode=OneWay, StringFormat=\{0:hh\\:mm\\:ss\} }" Style="{StaticResource Header1}" 
+                           Foreground="{StaticResource  Gray7}" d:Text="00:12:00" Margin="5 0" ToolTip="The duration of the current firewall session"/>
+
+                    <TextBlock Text="-" Style="{StaticResource Header1}" Foreground="{StaticResource Gray6}" Margin="15 0"/>
+
+                    <TextBlock Text="Unique Visitor:" Style="{StaticResource Header1}" Foreground="{StaticResource Gray6}"/>
+                    <TextBlock Text="{Binding Visitors, Mode=OneWay, StringFormat=N0}" Style="{StaticResource Header1}" 
+                           Foreground="{StaticResource  Gray7}" d:Text="15" Margin="5 0" ToolTip="New users detected in 24 hours"/>
+
+                    <TextBlock Text="-" Style="{StaticResource Header1}" Foreground="{StaticResource Gray6}" Margin="15 0"/>
+
+                    <TextBlock Text="Incidents detected:" Style="{StaticResource Header1}" Foreground="{StaticResource Gray6}"/>
+                    <TextBlock Text="{Binding Incidents, Mode=OneWay, StringFormat=N0}" Style="{StaticResource Header1}" 
+                           d:Text="32" Margin="5 0" ToolTip="Incidents detected in 24 hours"/>
+
+                </StackPanel>
+            </Border>
+            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <GroupBox  BorderThickness="1" BorderBrush="{StaticResource Gray3}">
+                    <GroupBox.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Resources/16/window_settings.png"/>
+                            <TextBlock Margin="5,0,0,0"><Run Text="Settings"/></TextBlock>
+                        </StackPanel>
+
+                    </GroupBox.Header>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Time Range:" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding Path=DateRange,Mode=OneWay}" VerticalAlignment="Center" Margin="5 0"/>
+
+                        <TextBlock Text="1" VerticalAlignment="Bottom" Style="{StaticResource Muted}"/>
+                        <Slider Minimum="1" Maximum="60" 
+                                Value="{Binding TimeTicks,Delay=500}" 
+                                VerticalAlignment="Center" TickPlacement="BottomRight" TickFrequency="5" 
+                                AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="0"
+                                IsEnabled="{Binding IsNotBusy}" />
+                        <TextBlock Text="60" VerticalAlignment="Bottom" Style="{StaticResource Muted}"/>
+                        <syncfusion:DropDownButtonAdv  VerticalAlignment="Center" Label="Time Range" SmallIcon="/Resources/24/clock.png" x:Name="dropdownButton" Margin="5 0">
+                            <syncfusion:DropDownMenuGroup>
+                                <syncfusion:DropDownMenuItem  HorizontalAlignment="Left" Header="Minutes" Command="{Binding ChangeTimeRangeScale}" CommandParameter="Minutes">
+                                </syncfusion:DropDownMenuItem>
+                                <syncfusion:DropDownMenuItem  HorizontalAlignment="Left" Header="Hours" Command="{Binding ChangeTimeRangeScale}" CommandParameter="Hours" >
+                                </syncfusion:DropDownMenuItem>
+                                <syncfusion:DropDownMenuItem  HorizontalAlignment="Left" Header="Days" Command="{Binding ChangeTimeRangeScale}" CommandParameter="Days" >
+                                </syncfusion:DropDownMenuItem>
+                                <syncfusion:DropDownMenuItem  HorizontalAlignment="Left" Header="Weeks" Command="{Binding ChangeTimeRangeScale}" CommandParameter="Weeks" >
+                                </syncfusion:DropDownMenuItem>
+                                <syncfusion:DropDownMenuItem  HorizontalAlignment="Left" Header="Months" Command="{Binding ChangeTimeRangeScale}" CommandParameter="Months" >
+                                </syncfusion:DropDownMenuItem>
+                                <syncfusion:DropDownMenuItem  HorizontalAlignment="Left" Header="Quarters" Command="{Binding ChangeTimeRangeScale}" CommandParameter="Quarters" >
+                                </syncfusion:DropDownMenuItem>
+                                <syncfusion:DropDownMenuItem  HorizontalAlignment="Left" Header="Years" Command="{Binding ChangeTimeRangeScale}" CommandParameter="Years" >
+                                </syncfusion:DropDownMenuItem>
+                            </syncfusion:DropDownMenuGroup >
+                        </syncfusion:DropDownButtonAdv>
+
+                        <TextBlock Text="Auto-Refresh:" Margin="15 0 5 0" VerticalAlignment="Center"/>
+                        <CheckBox IsChecked="{Binding AutoRefresh}" VerticalAlignment="Center" Margin="5 0 15 0"/>
+                        <syncfusion:TimeSpanEdit Value="{Binding AutoRefreshInterval}" 
+                                                 Format="m 'minutes' s 'sec'" 
+                                                 StepInterval="1.1:1:10"
+                                                 MinValue="0.0:0:1"
+                                                 MaxValue="0.0:59:0"                                                 
+                                                 Margin="0 0 5 0" />
+                        <Button Command="{Binding RefreshNow, IsAsync=true}" Style="{StaticResource Refresh}" Height="16" ToolTip="Fresh now" />
+
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox  BorderThickness="1" BorderBrush="{StaticResource Gray3}" >
+                    <GroupBox.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Resources/16/export.png"/>
+                            <TextBlock Margin="5,0,0,0"><Run Text="ISO 27000 reporting"/></TextBlock>
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <syncfusion:ButtonAdv  HorizontalAlignment="Left" 
+                                      Height="35" Label="Export" Margin="16,0,0,0" Width="75"
+                                       SmallIcon="/Resources/24/PDF.png"
+                                      />
+                        <syncfusion:ButtonAdv  HorizontalAlignment="Left" 
+                                      Height="35" Label="Export" Margin="16,0,0,0" Width="75"
+                                       SmallIcon="/Resources/24/XLS.png"
+                                      />
+
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox  BorderThickness="1" BorderBrush="{StaticResource Gray3}" >
+                    <GroupBox.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Resources/16/export.png"/>
+                            <TextBlock Margin="5,0,0,0"><Run Text="SOC reporting"/></TextBlock>
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <syncfusion:ButtonAdv  HorizontalAlignment="Left" 
+                                      Height="35" Label="Export" Margin="16,0,0,0" Width="75"
+                                       SmallIcon="/Resources/24/PDF.png"
+                                      />
+                        <syncfusion:ButtonAdv  HorizontalAlignment="Left" 
+                                      Height="35" Label="Export" Margin="16,0,0,0" Width="75"
+                                       SmallIcon="/Resources/24/XLS.png"
+                                      />
+
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox  BorderThickness="1" BorderBrush="{StaticResource Gray3}" >
+                    <GroupBox.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Resources/16/document_view.png" Height="14"/>
+                            <TextBlock Margin="5,0,0,0">
+                                <Run Text="Recommendations"/>
+                            </TextBlock>
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <syncfusion:ButtonAdv  HorizontalAlignment="Left" ToolTip="View the guideline on security measures under the EECC"
+                                      Height="35" Label="ENISA" Margin="16,0,0,0" Width="75" CommandParameter="ENISA" Command="{Binding OpenPdf}"
+                                       SmallIcon="/Resources/24/PDF.png"
+                                      />
+
+                        <syncfusion:ButtonAdv  HorizontalAlignment="Left" ToolTip="View DOJ Best Practices for Victim Response and Reporting of Cyber Incidents"
+                                      Height="35" Label="DOJ" Margin="16,0,0,0" Width="75" CommandParameter="DOJ" Command="{Binding OpenPdf}"
+                                       SmallIcon="/Resources/24/PDF.png"
+                                      />
+                        <syncfusion:ButtonAdv  HorizontalAlignment="Left" ToolTip="View national cyber incident response plan from Homeland Security"
+                                      Height="35" Label="DHS" Margin="16,0,0,0" Width="75" CommandParameter="DHS" Command="{Binding OpenPdf}"
+                                       SmallIcon="/Resources/24/PDF.png"
+                                      />
+                    </StackPanel>
+                </GroupBox>
+
+            </StackPanel>
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <!-- Row 0 -->
+                <!-- Administration header -->
+                <StackPanel Orientation="Vertical" Grid.Row="1">
+                    <Grid Background="{StaticResource Gray1}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <DockPanel Grid.Column="1" Margin="15 0">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"/>
+                        </DockPanel>
+                        <TextBlock Foreground="{StaticResource Gray6}" FontSize="18"  Text="Administration" Margin="5" Grid.Row="1"/>
+                    </Grid>
+                </StackPanel>
+
+
+                <!--Visitors Header-->
+                <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1" Margin="15 0">
+                    <Grid Background="{StaticResource Gray1}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Foreground="{StaticResource Gray6}" FontSize="18"  Text="Visitors" Margin="5" />
+                        <TextBlock Foreground="{StaticResource Gray6}"  Grid.Row="1" Grid.Column="1" VerticalAlignment="Bottom" Margin="5 0 0 5">                            
+                            <Run Text="Firewall is observing"/>
+                            <Run Text="{Binding ObservingBots, Mode=OneWay}" d:Text="5"/>
+                            <Run Text="bots as well as"/>
+                            <Run Text="{Binding ObservingHumans, Mode=OneWay}" d:Text="1"/>
+                            <Run Text="interactive users and"/>
+                            <Run Text="{Binding ObservingSearchEngines, Mode=OneWay}" d:Text="5"/>
+                            <Run Text="search engine sessions"/>
+                        </TextBlock>
+                    </Grid>
+                </StackPanel>
+
+
+                <!--Current Attacks Header-->
+                <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="2">
+                    <Grid Background="{StaticResource Gray1}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Foreground="{StaticResource Gray6}" FontSize="18" VerticalAlignment="Center"
+                                   Text="Current Attacks" Margin="5" Grid.Row="0" Grid.Column="0"/>
+
+                        <TextBlock Foreground="{StaticResource Gray6}" Grid.Row="0"  Grid.Column="1" VerticalAlignment="Bottom" Margin="5 0 0 5">                            
+                            <Run Text="Firewall is observing"/>
+                            <Run Text="{Binding ObservingMalicious, Mode=OneWay}"/>
+                            <Run Text="as well as blocked"/>
+                            <Run Text="{Binding BlockedMalicious, Mode=OneWay}"/>
+                            <Run Text="request sessions"/>
+                        </TextBlock>
+                    </Grid>
+                </StackPanel>
+
+                <!--Administration counters-->
+                <Border Grid.Row="2" Grid.Column="0" Background="{StaticResource Gray6}" MinHeight="300">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition  Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32" />
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                        </Grid.RowDefinitions>
+
+
+                        <Label Content="{Binding MaliciousUserAgentsCount, Mode=OneWay,StringFormat=N0}" d:Content="160,00" HorizontalAlignment="Right" Margin="15,0,5,0" FontSize="16" />
+                        <Label Content="Malicious User-Agents" Grid.Column="1" HorizontalAlignment="Left"   FontSize="16"/>
+                        <Button Content="Details" Visibility="Collapsed"  Command="{Binding NavigateToMaliciousUserAgents}" Grid.Column="2" HorizontalAlignment="Right" Margin="5 3" Width="64"/>
+
+
+                        <Label Content="{Binding VisitsBySearchEnginesCount, Mode=OneWay,StringFormat=N0}" d:Content="50" Grid.Row="1" HorizontalAlignment="Right"  Margin="0,0,5,0" FontSize="16"/>
+                        <Label Content="Visits by search engines" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="1"  FontSize="16" />
+                        <Button Content="Details" Visibility="Collapsed" Command="{Binding NavigateToMaliciousUserAgents}" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right"  Margin="5 3" Width="64"/>
+
+                        <Label Content="{Binding NewUsers, Mode=OneWay,StringFormat=N0}" d:Content="50" Grid.Row="2" HorizontalAlignment="Right"  Margin="0,0,5,0" FontSize="16"/>
+                        <Label Content="New Users" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="2"  FontSize="16" />
+                        <Button Content="Details" Visibility="Collapsed" Command="{Binding NavigateToMaliciousUserAgents}" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right"  Margin="5 3" Width="64"/>
+
+                        <Label Content="{Binding BlockedUsers, Mode=OneWay,StringFormat=N0}" d:Content="50" Grid.Row="3" HorizontalAlignment="Right"  Margin="0,0,5,0" FontSize="16"/>
+                        <Label Content="Blocked Users" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="3"  FontSize="16" />
+                        <Button Content="Details" Visibility="Collapsed"  Command="{Binding NavigateToMaliciousUserAgents}" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Right"  Margin="5 3" Width="64"/>
+
+                        <Label Content="{Binding NewUsers, Mode=OneWay,StringFormat=N0}" d:Content="50" Grid.Row="4" HorizontalAlignment="Right"  Margin="0,0,5,0" FontSize="16"/>
+                        <Label Content="Port based attacks" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="4"  FontSize="16" />
+                        <Button Content="Details" Visibility="Collapsed" Command="{Binding NavigateToMaliciousUserAgents}" Grid.Row="4" Grid.Column="2" HorizontalAlignment="Right"  Margin="5 3" Width="64"/>
+
+
+                    </Grid>
+                </Border>
+
+
+                <!--Visitor map-->
+                <Border Grid.Row="2" Grid.Column="1"  Margin="15 0" Background="{StaticResource Gray7}">
+                    <StackPanel>
+
+                        <syncfusion:SfMap Height="300" ZoomLevel="2" MinZoom="1" MaxZoom="4" EnableZoom="True" EnablePan="True">
+                            <syncfusion:SfMap.Layers>
+                                <syncfusion:ImageryLayer 
+                                    Markers="{Binding VisitorsMap, Mode=OneWay}" 
+                                    MarkerTemplate="{StaticResource ResourceKey=VisitorMarkerTemplate}"
+                                    Center="{Binding VisitorMapCenter, Mode=OneWay}"
+                                    />
+                            </syncfusion:SfMap.Layers>
+                        </syncfusion:SfMap>
+
+                        <Border Padding="5" Background="{StaticResource Gray4}">
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Expand" Command="{Binding ExpandVisitors}" Width="64" />
+                                <TextBlock Text="{Binding Path=LastRequest.Created, Mode=OneWay}" Margin="15,0,0,0" d:Text="hh:mm:ss"  Foreground="{StaticResource Gray7}"/>
+                                <TextBlock Text="{Binding Path=LastRequest.MapLocation.Country, Mode=OneWay}"   Margin="15,0,0,0" d:Text="USA"  Foreground="{StaticResource Gray7}"/>
+                                <TextBlock Text="{Binding Path=LastRequest.Path, Mode=OneWay}"  Margin="15,0,0,0" d:Text="/path/url" Foreground="{StaticResource Gray7}"  TextTrimming="CharacterEllipsis" MaxWidth="300"/>
+
+                            </StackPanel>
+                        </Border>
+
+                    </StackPanel>
+                </Border>
+                <!--Attackers map-->
+                <Border Grid.Row="2" Grid.Column="2" Background="{StaticResource Gray7}">
+                    <StackPanel>
+                        <syncfusion:SfMap Height="300" ZoomLevel="2" MinZoom="1" MaxZoom="4" EnableZoom="True" EnablePan="True">
+                            <syncfusion:SfMap.Layers>
+                                <syncfusion:ImageryLayer Markers="{Binding AttackersMap}" 
+                                                         MarkerTemplate="{StaticResource ResourceKey=AttackerMarkerTemplate}"/>
+                            </syncfusion:SfMap.Layers>
+                        </syncfusion:SfMap>
+
+                        <Border Padding="5" Background="{StaticResource Gray4}">
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Expand" Command="{Binding ExpandIncidents}" Width="64" />
+
+                                <TextBlock Text="{Binding Path=LastIncident.Created, Mode=OneWay}" Margin="5,0,0,0" d:Text="hh:mm:ss"  Foreground="{StaticResource Gray7}"/>
+                                <TextBlock Margin="15,0,0,0"  Foreground="{StaticResource Gray7}">
+                                    <Run Text="{Binding Path=LastIncident.ApproximateLocation.City}"/>
+                                    <Run Text="{Binding Path=LastIncident.ApproximateLocation.Country, Mode=OneWay}"/>
+                                </TextBlock>
+                                <TextBlock Text="{Binding Path=LastIncident.URL.LocalPath, Mode=OneWay}"  Margin="5,0,0,0" d:Text="/path/url" Foreground="{StaticResource Gray7}" />
+                                <TextBlock Margin="15,0,0,0" d:Text="/path/url" Foreground="{StaticResource Gray7}">
+                                    <Run Text="Expires:"/>
+                                    <Run Text="{Binding Path=LastIncident.Expires, Mode=OneWay}"/>
+                                </TextBlock>
+
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
+
+            </Grid>
+
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="827*"/>
+                    <ColumnDefinition Width="471*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <syncfusion:SfBusyIndicator x:Name="BusyBee" IsBusy="{Binding Path=IsLoading, Mode=OneWay}" 
+                                  AnimationType="Cupertino" Foreground="{StaticResource Gray7}" Height="24" Background="Transparent"
+                                  HorizontalAlignment="Center" VerticalAlignment="Center" IsManipulationEnabled="True">
+                    <syncfusion:SfBusyIndicator.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock x:Name="BusyText" Text="{Binding Path=BussyMessage,Mode=OneWay}"
+                                       TextAlignment="Center" Margin="0,10,0,10" FontSize="20" 
+                                       HorizontalAlignment="Stretch" TextWrapping="Wrap" 
+                                       Foreground="{StaticResource Gray0}" FontWeight="Bold"  />
+                        </DataTemplate>
+                    </syncfusion:SfBusyIndicator.HeaderTemplate>
+
+                </syncfusion:SfBusyIndicator>
+                <Border Grid.Row="1" Height="400" Margin="0 15 0 0" x:Name="ispPanel" Grid.ColumnSpan="2"  >
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+
+                        <Grid Background="{StaticResource Gray1}" VerticalAlignment="Top">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="28"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="Internet service providers (ISP) used in attacks" Foreground="{StaticResource Gray6}" FontSize="18" Margin="15,0" />
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 15 0">
+
+                                <syncfusion:ButtonAdv Content="ButtonAdv" Label="Abuse"  Width="75" Margin="0 2"
+                                                      ToolTip="Generate abuse report for the selected Internet Service Provider"
+                                       SmallIcon="/resources/24/PDF.png" HorizontalAlignment="Left" 
+                                       Command="{Binding GenerateAbuseReport}"   CommandParameter="{Binding SelectedIspItem}"
+                                      />
+                                <syncfusion:ButtonAdv Content="ButtonAdv" Label="Action" Margin="16,2" Width="75"
+                                                  ToolTip="Perform a quick action on the selected ISP dataset"
+                                       SmallIcon="/Resources/24/signal_flag_red.png" HorizontalAlignment="Left" 
+                                       Command="{Binding FireWallAction}"  CommandParameter="{Binding SelectedIspItem}"
+                                      />
+                                <syncfusion:ButtonAdv HorizontalAlignment="Right"  Margin="15,2"
+                                      Height="24" Label="Export"  Width="75"
+                                       SmallIcon="/Resources/24/XLS.png" Click="ButtonAdv_Click" 
+                                      />
+
+
+                                <syncfusion:ButtonAdv HorizontalAlignment="Right" Margin="0,2" 
+                                       Height="24" Label="Details"  Width="75" ToolTip="Get all we know about this IP address range of the Internet Service Provider (ISP)"
+                                       SmallIcon="/Resources/24/details.png" Command="{Binding ISPDetail}" CommandParameter="{Binding SelectedIspItem}"
+                                      />
+                            </StackPanel>
+
+                        </Grid>
+
+
+                        <syncfusion:SfDataGrid ItemsSource="{Binding ServiceProviders}"  Grid.Row="1" ColumnSizer="Star"
+                            x:Name="ispGrid"   ShowToolTip="True" Height="400" Width="{Binding Path=ActualWidth,ElementName=ispPanel,Mode=OneWay}"
+                              
+                               SelectionUnit="Row" SelectionMode="Single"
+                            SelectedItem="{Binding SelectedIspItem,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
+                            AllowGrouping="False" AutoGenerateColumns="true"
+                            CellToolTipOpening="sfISPDataGidTooltipOpening" 
+                            AllowSorting="True" AllowResizingColumns="True" AutoGeneratingColumn="sfAutoGenerateColumns" 
+                            ScrollViewer.VerticalScrollBarVisibility="Auto"                       
+                                                   >
+
+
+                        </syncfusion:SfDataGrid>
+
+                        <!--<syncfusion:SfDataPager Source="{Binding ServiceProviders}" NumericButtonCount="10" PageCount="10" x:Name="ispSource" />-->
+
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <Grid Grid.Row="4" Margin="0 15" Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="32"/>
+                    <RowDefinition Height="320"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0">
+                    <TextBlock Text="Firewall state"/>
+                </StackPanel>
+
+
+
+            </Grid>
+
+
+        </Grid>
+
+
+    </ScrollViewer>
+
+</UserControl>

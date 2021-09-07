@@ -1,0 +1,77 @@
+﻿<UserControl x:Class="Desktop.Controls.PortBasedAttacks"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Desktop.Controls"
+             mc:Ignorable="d" 
+             DataContext="{Binding RelativeSource={RelativeSource self}}"
+             
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="{Binding Path=PortAttack.PortName,Mode=OneWay}" FontWeight="DemiBold" d:Text="Port 1234 Socket Sucker"/>
+            <TextBlock Margin="15 0 0 0" VerticalAlignment="Bottom">
+                 <Run Text="{Binding Path=PortAttack.Attempts,StringFormat=N0}"/>
+                 <Run Text="incidents recorder between"/>
+                 <Run Text="{Binding Path=PortAttack.First}"/>
+                 <Run Text="and"/>
+                 <Run Text="{Binding Path=PortAttack.Last}"/>
+                <Run Text="UTC"/>
+            </TextBlock>
+        </StackPanel>
+
+        <ListView SnapsToDevicePixels="True"  Grid.Row="1"
+                Grid.IsSharedSizeScope="True" 
+                BorderThickness="0" 
+                ItemsSource="{Binding Path=PortAttack.Attacks}">
+
+            <ListView.View>
+
+                <GridView>
+                    <GridView.ColumnHeaderContainerStyle>
+                        <Style TargetType="GridViewColumnHeader">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="GridViewColumnHeader">
+                                        <Border BorderBrush="{StaticResource Dark}" BorderThickness="0 0 0 1" Padding="0 5 25 5">
+                                            <TextBlock Text="{TemplateBinding Content}"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </GridView.ColumnHeaderContainerStyle>
+                    <GridView.Columns>
+                        <GridViewColumn Header="From"  DisplayMemberBinding="{Binding Path=FirstDetectedOn}" />
+                        <GridViewColumn Header="Till"  DisplayMemberBinding="{Binding Path=LastDetection}"/>
+                        <GridViewColumn Header="Payload"  DisplayMemberBinding="{Binding Path=PayloadInfo}"/>
+                        <GridViewColumn Header="Response"  DisplayMemberBinding="{Binding Path=GuardResponse}"/>
+                        <GridViewColumn Header="Detections"  DisplayMemberBinding="{Binding Path=Communications}"/>
+                        <GridViewColumn Header="Log">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=CommunicationLog}" TextWrapping="Wrap"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView.Columns>
+                </GridView>
+            </ListView.View>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="VerticalAlignment" Value="Top"/>
+                    <Setter Property="Focusable" Value="False"/>
+                    <Setter Property="IsHitTestVisible" Value="False"/>
+                    <Setter Property="Margin" Value="0 10"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+
+        </ListView>
+    </Grid>
+</UserControl>

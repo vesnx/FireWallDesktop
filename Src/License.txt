@@ -1,0 +1,257 @@
+﻿
+-------------------------------------------------------------------------------
+SOFTWARE LICENSE - End-User License Agreement(EULA) REL. 2021.01.25
+-------------------------------------------------------------------------------
+
+Definitions:
+"The Software" references the Desktop.exe binary in its 
+compiled as well as decompiled form as well as any other artifacts
+included in this directory. 
+
+"The Owners" references Walter Verhoeven and Lambert Snellinx as 
+individuals and VESNX SA with Luxembourg 
+business ID: B 218.421, as its agent.
+
+"Valid License" defines a license that has not expired and is registered
+at https://www.asp-waf.com. See Terms and Conditions at 
+https://www.asp-waf.com/terms for the licensing terms. Terms and conditions 
+are subject to change. 
+
+"The License Server" refers a web application hosted at 
+https://service.asp-waf.com. This service is monitored and the data is 
+hosted in the European union and subject to EU privacy. 
+
+Please note that this system is for use in accordance with our terms 
+and conditions only and that we are monitoring access and use. Anyone 
+accessing this server expressly consents to such monitoring and is advised 
+that if such monitoring reveals possible evidence of criminal activity, 
+system administrators may provide the evidence of such monitoring to law 
+enforcement officials and any licenses you may have bought may be revoked. 
+
+
+-------------------------------------------------------------------------------
+Please read this End User License Agreement, hereafter called EULA carefully 
+before completing the installation process and using "the software". 
+It provides a license to use "The software" and contains warranty information 
+and liability disclaimers.
+
+This End-User License Agreement ("EULA") is a legal agreement between you 
+and "the owners". 
+
+If you register for a free trial of "the software", this EULA agreement will 
+also govern that trial. By clicking "accept" or installing and/or using 
+"the software", you are confirming your acceptance of "the software" and 
+agreeing to become bound by the terms of this EULA agreement.
+
+If you are entering into this EULA agreement on behalf of a company or other 
+legal entity, you represent that you have the authority to bind such entity 
+and its affiliates to these terms and conditions. If you do not have such 
+authority or if you do not agree with the terms and conditions of this EULA 
+agreement, do not install or use "the software".
+
+This EULA agreement shall apply only to "the software" supplied by Computer 
+Aided Trading Systems SA herewith regardless of whether other software is 
+referred to or described herein. The terms also apply to any Computer Aided 
+Trading Systems SA updates, supplements, Internet-based services, and support 
+services for "the software", unless other terms accompany those items on 
+delivery. If so, those terms apply.
+
+
+PRIVACY POLICY
+-------------------------------------------------------------------------------
+We collects the following data:
+When using this software and connecting to the honey pot demo site we will collect
+   1. The date/time when you first started using the software.
+   2. The date/time when it was the last time the "the software" was used.   
+   3. The IP Address used by the software 
+  
+
+We collect the data to validate compliance with the licensing terms.
+  
+We do not collect any data not mentioned above.
+
+How do we collect your data?:
+  We send your domain name as well as "the software" release to 
+  our cloud service web service by requesting data.
+
+How will we use your data?:
+  We will periodically validate that you're not in violation of our
+  license agreement by visiting your site.
+
+How do we store your data?:
+  We store your data electronically in a database physically
+  located one of our business premises. 
+
+How do we transmit the data?:
+  Data is send using a SSL session with "the license server". The license 
+  data in the SSL tunnel is ciphered using a PGP key provided via a PHP 
+  handshake with the server and can only be ready by the server as only 
+  the server has the private key.
+
+  If license server is not accessible from your network "the software" 
+  may not perform as expected and may even terminate the application.
+
+HOW TO CONTACT US
+-------------------------------------------------------------------------------
+If you have any questions about Our Company’s privacy policy, the data we hold 
+on you, or you would like to exercise one of your data protection rights, 
+please do not hesitate to contact us. 
+Email us at:
+  info@VESNX.com
+Or write to us at:
+  VESNX SA
+  29 Boulevard Grande-Duchesse Charlotte
+  1331 Luxembourg
+  Luxembourg
+
+
+LICENSE GRANT
+-------------------------------------------------------------------------------
+Owners hereby grants you a personal, 
+non-transferable, non-exclusive license to use "the software" on your devices 
+in accordance with the terms of this agreement.
+
+You are permitted to load "the software" (for example a PC, laptop, mobile or 
+tablet) under your control. You are responsible for ensuring your device meets 
+the minimum requirements of "the software" software.
+
+YOU ARE NOT PERMITTED TO:
+
+1. Edit, alter, modify, adapt, translate or otherwise change the whole or any 
+   part of "the software" nor permit the whole or any part of "the software" 
+   to be combined with or become incorporated in any other software, nor 
+   decompile, disassemble or reverse engineer "the Software" or attempt to 
+   do any such things;
+2. Reproduce, copy, distribute, resell or otherwise use "the Software" for any 
+   commercial purpose;
+3. Allow any third party to use "the software" on behalf of or for the benefit 
+   of any third party;
+4. Use "the software" in any way which breaches any applicable local, national 
+   or international law;
+5. Use "the software" for any purpose that "the owners" considers is a breach 
+   of this agreement, see https://www.asp-waf.com/terms;
+6. Use "the software" without a "valid license" after the trial period has 
+   expired. We reserve the right to invoice any violations using the data 
+   collected;
+7. Block communication between "the software" and "the license server"
+
+
+
+
+INTELLECTUAL PROPERTY AND OWNERSHIP
+-------------------------------------------------------------------------------
+Owners shall at all times retain ownership of "the software" as originally 
+downloaded by you and all subsequent downloads of "the software" by you. 
+
+"The software" (and the copyright, and other intellectual property rights of 
+any nature in "the software", including any modifications made) are and shall 
+remain the property of Walter Verhoeven and Lambert Snellinx.
+
+"The owners" reserves the sole right to grant, or not to grant, licenses to 
+use "the software" to third parties.
+
+Copyright (c) 2019-2020 Walter Verhoeven, Lambert Snellinx
+The above copyright notice and this permission notice shall be included in 
+all copies or substantial portions of "the software" when you include these 
+binaries in own software.
+
+
+DECOMPILING, DISASSEMBLING OR REVERSE ENGINEERING
+-------------------------------------------------------------------------------
+You acknowledge that "the software" contains trade secrets and other 
+proprietary information of "THE OWNERS" and its licensor's. Except to the 
+extent expressly permitted by this Agreement or by the laws of the jurisdiction 
+where you are located, you may not decompile, disassemble or otherwise reverse 
+engineer "the software" or engage in any other activities to obtain underlying 
+information that is not visible to the user in connection with normal use of 
+"the software".
+
+
+TERMS AND TERMINATION
+-------------------------------------------------------------------------------
+This EULA agreement is effective from the date you first use "the software" and 
+shall continue until terminated. You may terminate it at any time upon written 
+notice to "the owners".
+
+It will also terminate immediately if you fail to comply with any term of this
+EULA agreement. Upon such termination, the licenses granted by this EULA
+agreement will immediately terminate and you agree to stop all access and use
+of "the software". The provisions that by their nature continue and survive 
+will survive any termination of this EULA agreement.
+
+If you fail to pay any fees related to "THE SOFTWARE" or any related service, 
+or violate any term or condition of this EULA, "the owners" or its agent may 
+terminate this license immediately by giving notice of termination to you. You
+are responsible for providing valid contact information to "The owners". If no
+valid contact information is available for you in "the owners" records, then
+"the owners" are not required to give a notice of termination to you
+
+
+TERMS OF SERVICE
+-------------------------------------------------------------------------------
+By using "the software" you explicitly agree and understand that we will send
+usage data to our license server in order for us to validate agreements to
+these terms and licensing conditions. If you do not agree to these terms you
+may not use "the software".
+
+3rd party software:
+The solution provided may contain dependencies that have their own license
+agreements before you are able to make use of them. Please validate that you
+are in compliance with those licenses.
+
+Software Updates:
+At present we do not offer a subscription service, in order to keep 
+"the software" up to date you should update the software regularly and
+re-deploy this on your website. 
+
+Service Agreements
+We are not obligated to support you in any way when using our software
+Service agreements in regards to SLA and support tickets are managed by their
+own terms and conditions.
+
+If you feel that "the software" is malfunctioning please send a email to
+support@catsiv.com.
+
+
+3RD PARTY LICENSE AGREEMENTS
+-------------------------------------------------------------------------------
+"The Software" may have dependencies on external binaries that come with their 
+own license agreements and terms and conditions. "THE OWNERS" do not grant you
+licensed access and you will have to agree to and accept 3rd party terms before 
+being able to use those 3rd parties.
+
+"The software", at the time of compilation, does not contain any 3rd party 
+binaries that are not in the public domain.
+
+
+
+NO WARRANTY
+-------------------------------------------------------------------------------
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
+IN THE SOFTWARE.
+
+
+LIMITATION OF LIABILITY
+-------------------------------------------------------------------------------
+IN NO EVENT SHALL "THE OWNERS" OR ITS LICENSORS BE LIABLE FOR ANY DAMAGES 
+WHATSOEVER (INCLUDING, WITHOUT LIMITATION, INCIDENTAL, DIRECT, INDIRECT, 
+SPECIAL OR CONSEQUENTIAL DAMAGES, DAMAGES FOR LOSS OF BUSINESS PROFITS, 
+BUSINESS INTERRUPTION, LOSS OF BUSINESS INFORMATION, OR OTHER PECUNIARY LOSS)
+ARISING OUT OF THE USE OR INABILITY TO USE THIS SOFTWARE, 
+
+EVEN IF "THE OWNERS" HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+BECAUSE SOME STATES/COUNTRIES DO NOT ALLOW THE EXCLUSION OR LIMITATION OF 
+LIABILITY FOR CONSEQUENTIAL OR INCIDENTAL DAMAGES, THE ABOVE LIMITATION 
+MAY NOT APPLY TO YOU.
+
+
+GOVERNING LAW
+-------------------------------------------------------------------------------
+This EULA agreement, and any dispute arising out of or in connection with this 
+EULA agreement, shall be governed by and construed in accordance with the laws 
+of Luxembourg

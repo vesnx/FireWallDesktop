@@ -1,0 +1,80 @@
+﻿<UserControl x:Class="Desktop.Dialogs.RequestFlow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"             
+             xmlns:Syncfusion="http://schemas.syncfusion.com/wpf"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:vm="clr-namespace:Desktop.Dialogs" 
+             d:DataContext="{d:DesignInstance Type=vm:RequestFlowViewModel}"
+             mc:Ignorable="d"
+             Height="640" Width="980" Background="White"
+             prism:ViewModelLocator.AutoWireViewModel="True">
+    <prism:Dialog.WindowStyle>
+        <Style TargetType="Window">
+            <Setter Property="prism:Dialog.WindowStartupLocation" Value="CenterScreen" />
+            <Setter Property="ResizeMode" Value="NoResize"/>
+            <Setter Property="ShowInTaskbar" Value="False"/>
+            <Setter Property="SizeToContent" Value="WidthAndHeight"/>
+        </Style>
+    </prism:Dialog.WindowStyle>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition />       
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0">
+            <!--<TextBlock Style="{StaticResource Header1}" Margin="5,0,0,5">
+                <Run Text="Requests for "/>
+                <Run Text="{Binding Path=VisitSession.IPAddress,Mode=OneWay}"/>
+                <Run Text="Proximate Location "/>
+                <Run Text="{Binding Path=VisitSession.ApproximateLocation}"/>
+            </TextBlock>-->
+            <TextBlock>
+                <Run Text="The firewall maybe configured to allow a number of incidents before triggering a block based on the type of user or incident type triggered"/>
+                <LineBreak/>
+                <Run Text="Inspect the firewall rules to loosen or harden the firewall rule engine or instruct your developers to issue a block response using the OnIncident event using the firewall API"/>
+            </TextBlock>
+        </StackPanel>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Syncfusion:SfDataGrid Grid.Column="0"  ItemsSource="{Binding Data, Mode=OneWay}" >
+                    <Syncfusion:SfDataGrid.Columns>
+                    <Syncfusion:GridDateTimeColumn MappingName="Created" HeaderText="Requested"/>
+                    <Syncfusion:GridTextColumn MappingName="Method" HeaderText="Protocol" AllowFiltering="True"/>
+                    <Syncfusion:GridUnBoundColumn MappingName="Path" HeaderText="Path" AllowFiltering="True"/>
+                    <Syncfusion:GridTextColumn MappingName="LinkType" HeaderText="Link Type" AllowFiltering="True"/>
+                    <Syncfusion:GridTextColumn MappingName="UserType" HeaderText="User Type" AllowFiltering="True"/>
+                    <Syncfusion:GridTextColumn MappingName="Triggered" HeaderText="Triggered"  AllowFiltering="True"/>
+
+                </Syncfusion:SfDataGrid.Columns>
+            </Syncfusion:SfDataGrid>
+
+            <Syncfusion:SfGridSplitter Name="gridSplitter" ShowsPreview="True"
+                                   HorizontalAlignment="Stretch" 
+                                   ResizeBehavior="PreviousAndNext"
+                                   Width="auto" EnableCollapseButton="True"
+                                   Grid.Column="1">
+            </Syncfusion:SfGridSplitter>
+            <!--<Syncfusion:TabControlExt Grid.Column="2" 
+                ShowTabItemContextMenu="False" 
+                SelectOnCreatingNewItem="False" 
+                ShowTabListContextMenu="False" CloseButtonType="Hide"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                ItemsSource="{Binding BreadCrumbs}">
+                
+            </Syncfusion:TabControlExt>-->
+
+        </Grid>
+        
+        <StackPanel Margin="2" Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center">
+            <Button Content="Apply" Command="{Binding DlgCommand, Mode=OneWay}"  CommandParameter="OK" Width="64" Height="32" Margin="0,0,5,0"/>                
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -1,0 +1,169 @@
+﻿<!--syncfusionskin:SfSkinManager.VisualStyle="{Binding Theme}"-->
+<syncfusion:ChromelessWindow  xmlns:Controll="clr-namespace:Desktop.Authentication.Controll;assembly=Desktop.Authentication"        
+    x:Class="Desktop.Views.MainWindow"
+        xmlns:core="clr-namespace:Desktop.Core;assembly=Desktop.Core"
+        xmlns:mmvm="http://asp-waf.com/2021/wpf"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:local="clr-namespace:Desktop.ViewModels" 
+        xmlns:prism="http://prismlibrary.com/"
+        xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+        xmlns:syncfusionskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF" 
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        prism:ViewModelLocator.AutoWireViewModel="True"
+        WindowStartupLocation="CenterScreen"
+        RightHeaderItemsSource="{DynamicResource rightHeaderItems}"
+       
+                              
+        syncfusionskin:SfSkinManager.VisualStyle="Office365"
+        Title="{Binding Title}" 
+        WindowState="Maximized" 
+        SizeToContent="WidthAndHeight"
+        TitleBarHeight="32" TitleTextAlignment="Left" 
+        IconAlignment="Left" AllowsTransparency="True" 
+        Icon="/Resources/user_headset.png" 
+        >
+    <syncfusion:ChromelessWindow.Resources>
+
+        <local:ObservableCollection x:Key="leftHeaderItems">
+            
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Title}" FontWeight="Black" Margin="5 0 15 0"/>
+                <TextBlock Text="{Binding DisplayName, Mode=OneWay}" FontWeight="DemiBold" />
+                <Controll:Hyperlink Uri="{Binding Domain}" Text="{Binding Path=Domain.DnsSafeHost, Mode=OneWay}" Margin="15 0"/>
+                <TextBlock>
+                    <Run Text="User :"/>
+                    <Run Text="{Binding UserName, Mode=OneWay}"/>
+                </TextBlock>
+                <TextBlock Margin="15 0">
+                    <Run Text="Role :"/>
+                    <Run Text="{Binding Role, Mode=OneWay}"/>
+                </TextBlock>
+                 <TextBlock>
+                    <Run Text="State :"/>
+                    <Run Text="{Binding State, Mode=OneWay}"/>
+                </TextBlock>
+                
+            </StackPanel>
+        </local:ObservableCollection>
+        
+        <local:ObservableCollection x:Key="rightHeaderItems">
+            <Button Margin="5,0,15,0" >
+                <StackPanel>
+                    <Button Content="Sign-out" Command="{Binding SignOut}"/>
+                </StackPanel>
+            </Button>
+        </local:ObservableCollection>
+        <Style TargetType="Border" x:Key="HambergerMenuItem">
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+        <Style TargetType="Label" x:Key="HambergerMenuText">
+            <Setter Property="Foreground" Value="{StaticResource Gray6}"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Visibility" Value="Collapsed"/>
+        </Style>
+    </syncfusion:ChromelessWindow.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        <Rectangle Fill="{StaticResource Gray1}"  Grid.Column="0"/>
+        <StackPanel Orientation="Vertical" Grid.Column="0">
+            <Button Command="{Binding NavigateTo}" CommandParameter="Dashboard" Cursor="Hand">
+                <Button.Template>
+                    <ControlTemplate>
+                        <Border  Style="{StaticResource HambergerMenuItem}">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/Resources/32/Dashboard.png" ToolTip="Dashboard"/>
+                                <Label Content="_Dashboard" Style="{StaticResource HambergerMenuText}" />
+                            </StackPanel>
+                        </Border>
+
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Rectangle Height="1" Fill="{StaticResource Gray3}" />
+            <Button Command="{Binding NavigateTo}" CommandParameter="PenetrationAttacks"  Cursor="Hand">
+                <Button.Template>
+                    <ControlTemplate>
+                        <Border Style="{StaticResource HambergerMenuItem}">
+                            <StackPanel Orientation="Horizontal" Background="{StaticResource Gray1}" >
+                                <Image Source="/Resources/32/Penetration.png" ToolTip="Penetration Attacks"/>
+                                <Label Content="_Penetration Attacks" Style="{StaticResource HambergerMenuText}"/>
+                            </StackPanel>
+                        </Border>
+
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+
+            <Button Command="{Binding NavigateTo}" CommandParameter="AttackedEndpoints"  Cursor="Hand">
+                <Button.Template>
+                    <ControlTemplate>
+                        <Border Style="{StaticResource HambergerMenuItem}">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/Resources/32/Endpoint.png" ToolTip="Attacked endpoints"/>
+                                <Label Content="Attacked endpoints" Style="{StaticResource HambergerMenuText}"/>
+                            </StackPanel>
+                        </Border>
+
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+
+            <Button Command="{Binding NavigateTo}" CommandParameter="InternetProviders"  Cursor="Hand">
+                <Button.Template>
+                    <ControlTemplate>
+                        <Border Style="{StaticResource HambergerMenuItem}">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/Resources/32/ISP.png" ToolTip="Internet Providers"/>
+                                <Label Content="Internet Providers" Style="{StaticResource HambergerMenuText}"/>
+                            </StackPanel>
+                        </Border>
+
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button Command="{Binding NavigateTo}" CommandParameter="MaliciousUserAgents"  Cursor="Hand">
+                <Button.Template>
+                    <ControlTemplate>
+                        <Border Style="{StaticResource HambergerMenuItem}">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/Resources/32/UserAgent.png" ToolTip="Malicious User-Agents"/>
+                                <Label Content="Malicious User-Agents" Style="{StaticResource HambergerMenuText}"/>
+                            </StackPanel>
+                        </Border>
+
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+
+            <Button Command="{Binding NavigateTo}" CommandParameter="PortScanners"  Cursor="Hand">
+                <Button.Template>
+                    <ControlTemplate>
+                        <Border Style="{StaticResource HambergerMenuItem}">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/Resources/32/PortScan.png" ToolTip="Port Scanners"/>
+                                <Label Content="Port Scanners" Style="{StaticResource HambergerMenuText}"/>
+                            </StackPanel>
+                        </Border>
+
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+
+        </StackPanel>
+
+
+        <Grid Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <ContentControl prism:RegionManager.RegionName="ContentRegion"  />
+        </Grid>
+    </Grid>
+
+
+</syncfusion:ChromelessWindow>

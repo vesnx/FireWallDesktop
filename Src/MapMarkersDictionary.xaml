@@ -1,0 +1,14 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        
+<DataTemplate x:Key="MapMarkerTemplateCountryCount">
+    <Grid>
+        <Canvas>
+            <Image Source="/Resources/16/pin2_orange.png" Height="16" />
+            <TextBlock HorizontalAlignment="Center" Margin="0,30,0,0" FontSize="30" FontFamily="Segoe UI" Text="{Binding Country}"/>
+            <TextBlock HorizontalAlignment="Center" Margin="0,30,0,0" FontSize="30" FontFamily="Segoe UI" Text="{Binding Count, StringFormat=N0}"/>
+        </Canvas>
+    </Grid>
+</DataTemplate>
+        
+</ResourceDictionary>

@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="Desktop.Views.MaliciousUserAgents"   
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"             
+             xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+             xmlns:viewmodels="clr-namespace:Desktop.ViewModels" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             
+             prism:ViewModelLocator.AutoWireViewModel="True">
+    <ScrollViewer>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition x:Name="navigation"/>
+                <RowDefinition x:Name="master"/>
+                <RowDefinition x:Name="details"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0">
+                <TextBox Text="filter"/>
+            </StackPanel>
+
+            <syncfusion:SfDataGrid HorizontalAlignment="Left" 
+                                   ItemsSource="{Binding UserAgents}" 
+                                   SelectedItems="{Binding SelectedItems,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                                   SelectionMode="Single"
+                                   SelectionUnit="Row"
+                                   ShowRowHeader="True"                                   
+                                   >
+                
+            </syncfusion:SfDataGrid>
+
+        </Grid>
+    </ScrollViewer>
+
+</UserControl>

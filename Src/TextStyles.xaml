@@ -1,0 +1,25 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style TargetType="TextBlock" x:Key="Header1">
+        <Setter Property="FontSize" Value="24" />
+    </Style>
+    <Style TargetType="TextBlock" x:Key="Header2">
+        <Setter Property="FontSize" Value="18" />
+    </Style>
+        <Style TargetType="TextBlock" x:Key="Header3" >
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontWeight" Value="DemiBold" />
+        
+    </Style>
+    <Style TargetType="TextBlock" x:Key="Header2White">
+        <Setter Property="Foreground" Value="{StaticResource Gray6}" />
+        <Setter Property="FontSize" Value="18" />
+    </Style>
+    <Style TargetType="TextBlock" x:Key="Muted">
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="FontWeight" Value="Light" />
+    </Style>
+    <Style TargetType="TextBlock" x:Key="MutedBue" BasedOn="{StaticResource Muted}">
+        <Setter Property="Foreground" Value="Navy" />
+    </Style>
+</ResourceDictionary>

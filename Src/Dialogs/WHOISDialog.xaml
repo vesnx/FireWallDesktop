@@ -1,0 +1,422 @@
+﻿<UserControl
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:prism="http://prismlibrary.com/"     
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+            xmlns:syncfusion="http://schemas.syncfusion.com/wpf" 
+            xmlns:converters="clr-namespace:Desktop.Converters"
+            xmlns:Syncfusion="http://schemas.syncfusion.com/wpf" 
+            xmlns:dialogs="clr-namespace:Desktop.Dialogs" 
+            xmlns:models="clr-namespace:Desktop.Model;assembly=Desktop.Model"
+            xmlns:trust="clr-namespace:Walter.Net.Networking;assembly=Walter.Net.Networking"
+            xmlns:Controll="clr-namespace:Desktop.Authentication.Controll;assembly=Desktop.Authentication"             
+            x:Class="Desktop.Dialogs.WHOISDialog"
+
+            mc:Ignorable="d"
+            d:Width="650" d:Background="White"
+            prism:ViewModelLocator.AutoWireViewModel="True"
+            xmlns:collections="clr-namespace:System.Collections;assembly=mscorlib"
+        >
+    <prism:Dialog.WindowStyle>
+        <Style TargetType="{x:Type Window}">
+            <Setter Property="prism:Dialog.WindowStartupLocation" Value="CenterScreen" />
+            <Setter Property="ResizeMode" Value="NoResize"/>
+            <Setter Property="ShowInTaskbar" Value="True"/>
+            <Setter Property="SizeToContent" Value="WidthAndHeight"/>
+            <Setter Property="Title" Value="{Binding Title}"/>
+
+            <Setter Property="WindowStyle" Value="ToolWindow"/>
+        </Style>
+    </prism:Dialog.WindowStyle>
+    <UserControl.Resources>
+        <converters:RadioBoolToIntConverter  x:Key="radioBoolToIntConverter" />
+        <converters:ComparisonConverter  x:Key="ComparisonConverter" />
+        <x:Array Type="models:WhoisContactDetails" x:Key="contacts">
+            <models:WhoisContactDetails Name="VESNX AG" 
+                                         Address="29 Boulevard Grande-Duchesse Charlotte, 1331 Luxembourg" 
+                                         Phone="+325 123 1234567"                                                   
+                                        
+                                         EMail="abuse@spam.com"
+                                         Created="2021.01.01"
+                                         LastModified="2021.06.01"                                                        
+                                         WhoisContactType="Organization"
+                                         />
+            <models:WhoisContactDetails Name="Walter Verhoeven" 
+                                        Address="Peter Möller. Gottard strasse 12, 142 Zurich, Schweiz" 
+                                        Phone="0123 1234567"
+                                        Fax="0123 1234568"
+                                       
+                                        EMail="abuse@spam.com"
+                                        Created="2021.01.01"
+                                        LastModified="2021.06.01"
+                                        WhoisContactType="Administration"
+                                        />
+        </x:Array>
+
+    </UserControl.Resources>
+    <Grid>
+
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Visibility="Collapsed">
+
+            <TextBlock Text="This dialog contains WHOIS information for the Internet Service Provider (ISP) that manages a specific IP address range. You can re-query, export, print the data."  TextWrapping="Wrap" />
+        </StackPanel>
+        <ScrollViewer Grid.Row="1" Margin="10,5,0,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" x:Name="rowThreadStats"/>
+                    <RowDefinition Height="auto" x:Name="ipRowTitle"/>
+                    <RowDefinition Height="auto" x:Name="ipRow"/>
+                    <RowDefinition Height="auto" x:Name="rowContactsTitle"/>
+                    <RowDefinition Height="auto" x:Name="rowContacts"/>
+
+                    <RowDefinition Height="auto" x:Name="rowMetaTitleTitle"/>
+                    <RowDefinition Height="auto" x:Name="rowMeta"/>
+                </Grid.RowDefinitions>
+                <Grid x:Name="gridTheadStats" Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Organization" Style="{StaticResource Header3}" />
+                    <TextBlock Grid.Row="1" Grid.Column="0" Margin="5 0"  d:Text="KPN AG" Text="{Binding WHOIS.Organization, Mode=OneWay}" TextWrapping="Wrap" ToolTip="The name of the extracted from the organization or management company address card"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" d:Text="Stationsstraat 115 (visit address) P.O. box 3053 3800 DB Amersfoort The Netherlands" Text="{Binding WHOIS.OrganizationAddress, Mode=OneWay}" TextWrapping="Wrap" ToolTip="The address extracted from the organization or management company address card" HorizontalAlignment="Left" />
+                    <TextBlock Grid.Row="2" Grid.Column="0" Margin="5 0" Text="Trust Status" />
+                    <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" 
+                                ToolTip="Update the trust status to report or to block the internet service provider">
+                        <RadioButton GroupName="trust" Content="Report" IsChecked="{Binding Path=WHOIS.TrustLevel, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static trust:ISPTrustLevels.Report}}"/>
+                        <RadioButton GroupName="trust" Content="Block" Margin="5 0 0 0" IsChecked="{Binding Path=WHOIS.TrustLevel, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static trust:ISPTrustLevels.BlockFilter}}"/>
+                    </StackPanel>
+                    <TextBlock Grid.Row="2" Grid.Column="2" Text="* changes to the states do not expire and are not considered actions" Grid.ColumnSpan="2" FontStyle="Italic"/>
+
+                    <TextBlock  Grid.Row="3" Grid.Column="0" Margin="0 15 0 0"  Text="Thread Statistics" Style="{StaticResource Header3}" />
+
+                    <TextBlock Grid.Row="4" Grid.Column="0" Margin="5 0"  Text="IP Addresses"/>
+                    <TextBlock Grid.Row="4" Grid.Column="1" ><Run Text=":"/><Run Text=" "/>
+                        <Run  Text="{Binding WHOIS.Counters.Users, StringFormat=N0, Mode=OneWay}" d:Text="80"/></TextBlock>
+
+                    <TextBlock Grid.Row="4" Grid.Column="2" Text="IP Addresses with Malicious activity"  />
+                    <TextBlock Grid.Row="4" Grid.Column="3"  ><Run Text=":"/><Run Text=" "/><Run Text="{Binding WHOIS.Counters.IPAddressesWithIncidents,Mode=OneWay , StringFormat=N0}" d:Text="2" /><Run Text=" "/><Run Text="or" FontStyle="Italic" FontSize="10"/><Run Text=" "/><Run  FontStyle="Italic" FontSize="10" Text="{Binding WHOIS.Counters.IPAddressesWithIncidentsRatio, Mode=OneWay, StringFormat=N2}" d:Text="2.5%"/><Run Text=" "/><Run Text="of all IP addresses" FontStyle="Italic" FontSize="10"/></TextBlock>
+                    <TextBlock Grid.Row="5" Grid.Column="2" Text="IP Addresses in Port-based attacks"/>
+                    <TextBlock Grid.Row="5" Grid.Column="3" ><Run Text=":"/><Run Text=" "/>
+                        <Run Text="{Binding WHOIS.Counters.IPAddressesWithPortBasedIncidents,Mode=OneWay,  StringFormat=N0}" d:Text="1" />
+                        <Run Text=" "/><Run Text="or" FontStyle="Italic" FontSize="10"/>
+                        <Run Text=" "/>
+                        <Run  FontStyle="Italic" FontSize="10" Text="{Binding WHOIS.Counters.IPAddressesWithPortBasedIncidentsRatio, Mode=OneWay, StringFormat=N2}" d:Text="2.5%"/>
+                        <Run Text=" "/>
+                        <Run Text="of all IP addresses" FontStyle="Italic" FontSize="10"/>
+                    </TextBlock>
+                    <TextBlock Grid.Row="6" Grid.Column="0" Text="Users on IP Address" Margin="5 0"/>
+                    <TextBlock Grid.Row="6" Grid.Column="1"  >
+                        <Run Text=":"/>
+                        <Run Text=" "/>
+                        <Run  Text="{Binding WHOIS.Counters.Users,  Mode=OneWay,StringFormat=N0}" d:Text="101"/>
+                    </TextBlock>
+
+                    <TextBlock Grid.Row="6" Grid.Column="2" Text="Requests Served"  />
+                    <TextBlock Grid.Row="6" Grid.Column="3" >
+                        <Run Text=":"/>
+                        <Run Text=" "/>
+                        <Run Text="{Binding WHOIS.Counters.RequestsServed, Mode=OneWay, StringFormat=N0}" d:Text="100" />
+                    </TextBlock>
+
+                    <TextBlock Grid.Row="7" Grid.Column="0" Margin="5 0"  Text="Users With Incidents"  />
+                    <TextBlock Grid.Row="7" Grid.Column="1" Margin="0 0 5 0">
+                        <Run Text=":"/>
+                        <Run Text=" "/>
+                        <Run Text="{Binding WHOIS.Counters.UsersWithIncidents , Mode=OneWay,StringFormat=N0}" d:Text="10"/>
+                        <Run Text=" "/>
+                        <Run Text="or"  FontStyle="Italic" FontSize="10" />
+                        <Run Text=" "/>
+                        <Run FontStyle="Italic" FontSize="10" Text="{Binding WHOIS.Counters.UsersWithIncidentsRatio, Mode=OneWay, StringFormat=N2}" d:Text="10%"/>
+                        <Run Text=" "/><Run Text="of all users" FontStyle="Italic" FontSize="10"/>
+                    </TextBlock>
+                    <TextBlock Grid.Row="7" Grid.Column="2" Text="Users With Block Status"  />
+
+                    <TextBlock Grid.Row="7" Grid.Column="3" >
+                        <Run Text=":"/>
+                        <Run Text=" "/>
+                        <Run Text="{Binding WHOIS.Counters.UsersWithBlockStatus, Mode=OneWay ,StringFormat=N0}" d:Text="5"/>
+                        <Run Text=" "/>
+                        <Run Text="or"  FontStyle="Italic" FontSize="10" />
+                        <Run Text=" "/>
+                        <Run  FontStyle="Italic" FontSize="10" Text="{Binding WHOIS.Counters.UsersWithBlockStatusRatio, Mode=OneWay, StringFormat=N2}" d:Text="10%" />
+                        <Run Text=" "/>
+                        <Run Text="of all users"  FontStyle="Italic" FontSize="10" />
+                    </TextBlock>
+
+
+
+                    <TextBlock Grid.Row="8" Grid.Column="0" Margin="5 0"  Text="Incidents" />
+                    <TextBlock Grid.Row="8" Grid.Column="1" Margin="0 0 5 0" >
+                        <Run Text=":"/>
+                        <Run Text=" "/>
+                        <Run  Text="{Binding WHOIS.Counters.Incidents, Mode=OneWay,StringFormat=N0}" d:Text="100"/>
+                        
+                    </TextBlock>
+                    <TextBlock Grid.Row="8" Grid.Column="2" Text="Last Incident"/>
+                    <TextBlock Grid.Row="8" Grid.Column="3">
+                        <Run Text=":"/>
+                        <Run Text=" "/>
+                        <Run Text="{Binding WHOIS.Counters.LastIncident, Mode=OneWay}" d:Text="2021.07.01 22:00:00"/>
+                    </TextBlock>
+
+
+                    <TextBlock Grid.Row="9" Grid.Column="0" Margin="5 0"  Text="Port Based Incidents"  />
+                    <TextBlock Grid.Row="9" Grid.Column="1">
+                        <Run Text=":"/>
+                        <Run Text=" "/>
+                        <Run Text="{Binding WHOIS.Counters.PortBasedIncidents, Mode=OneWay, StringFormat=N0}" d:Text="100"/>
+                    </TextBlock>
+                    <TextBlock Grid.Row="9" Grid.Column="2"  Text="Last Ports Attack"/>
+                    <TextBlock Grid.Row="9" Grid.Column="3">
+                        <Run Text=":"/>
+                        <Run Text=" "/>
+                        <Run Text="{Binding WHOIS.Counters.LastPortsAttack, Mode=OneWay}" d:Text="2021.07.01 22:00:00"/>
+                    </TextBlock>
+                    <TextBlock Grid.Row="10" Grid.Column="2" Text="Number of Ports Attacked"/>
+                    <TextBlock Grid.Row="10" Grid.Column="3">
+                        <Run Text=":"/>
+                        <Run Text=" "/>
+                        <Run  Text="{Binding WHOIS.Counters.PortsAttacked, Mode=OneWay, StringFormat=N0}" d:Text="2"/>
+                    </TextBlock>
+                    <TextBlock Grid.Row="11" Grid.Column="0" Text="First Seen" Margin="5 0"/>
+                    <TextBlock Grid.Row="11" Grid.Column="1" Margin="0,0,5,0">
+                        <Run Text=":"/>
+                        <Run Text=" "/>
+                        <Run Text="{Binding WHOIS.Created, Mode=OneWay}" d:Text="2021.07.01 22:00:00"/>
+                    </TextBlock>
+                    <TextBlock Grid.Row="11" Grid.Column="2" Text="Last Seen"/>
+                    <TextBlock Grid.Row="11" Grid.Column="3">
+                        <Run Text=":"/>
+                        <Run Text=" "/>
+                        <Run Text="{Binding WHOIS.Counters.LastSeen, Mode=OneWay}" d:Text="2021.07.01 22:00:00"/>
+                    </TextBlock>
+
+
+
+                </Grid>
+
+                <StackPanel Grid.Row="1" Grid.Column="0"  Margin="0 15 0 0" >
+                    <TextBlock Text="IP Addresses" Style="{StaticResource Header3}" />
+                    <TextBlock Text="Internet service providers can have several address ranges, this particular instance show the following address range(s)"/>
+                </StackPanel>
+
+
+                <ListView Grid.Row="2" ItemsSource="{Binding WHOIS.IpAddresses}">
+                    <d:ListView.ItemsSource>
+                        <x:Array Type="{x:Type models:WhoisIPRange}">
+                            <models:WhoisIPRange From="192.225.2.1" Till="192.225.2.255" Discovered="01.01.2021 05:00:01" Count="255"/>
+                        </x:Array>
+                    </d:ListView.ItemsSource>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="IP Range Start" Width="120" DisplayMemberBinding="{Binding From, Mode=OneWay}"  />
+                            <GridViewColumn Header="IP Range Ends" Width="120" DisplayMemberBinding="{Binding Till, Mode=OneWay}"/>
+                            <GridViewColumn Header="Last Updated" Width="120" DisplayMemberBinding="{Binding Discovered, Mode=OneWay}"/>
+                            <GridViewColumn Header="Number of IP Addresses" Width="120" DisplayMemberBinding="{Binding Count, Mode=OneWay, StringFormat=N0}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <StackPanel  Grid.Row="3"  Margin="0 15 0 0" >
+                    <TextBlock Text="Contact Detail" Style="{StaticResource Header3}" />
+                    <TextBlock Text="The following contact details have been associated with this address range"/>
+                </StackPanel>
+
+                <Syncfusion:TabControlExt ItemsSource="{Binding WHOIS.ContactDetails.Details}" 
+                       x:Name="tabControlExt" Grid.Row="4" d:ItemsSource="{StaticResource contacts}"
+                 ShowTabItemContextMenu="False" SelectOnCreatingNewItem="False" 
+                                          ShowTabListContextMenu="False" CloseButtonType="Hide" 
+                                          
+                                          >
+
+                    <!--Binding the header text for the Tab item-->
+                    <Syncfusion:TabControlExt.ItemContainerStyle>
+                        <Style TargetType="{x:Type Syncfusion:TabItemExt}">
+                            <Setter Property="HeaderTemplate">
+                                <Setter.Value>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding WhoisContactType, Mode=OneWay}" />
+                                    </DataTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Syncfusion:TabControlExt.ItemContainerStyle>
+
+                    <!--Binding the content for the Tab item-->
+                    <Syncfusion:TabControlExt.ContentTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Name"  Margin="5 0" VerticalAlignment="Top"/>
+                                <TextBlock Grid.Row="0" Grid.Column="1" Text=":"  VerticalAlignment="Top"/>
+                                <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Name, Mode=OneWay}" Margin="5 0" VerticalAlignment="Top" TextWrapping="Wrap"/>
+
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Address" Margin="5 0" VerticalAlignment="Top"/>
+                                <TextBlock Grid.Row="1" Grid.Column="1" Text=":"  VerticalAlignment="Top"/>
+                                <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Address, Mode=OneWay}" Margin="5 0" VerticalAlignment="Top" TextWrapping="Wrap"/>
+
+                                <TextBlock Grid.Row="2" Grid.Column="0" Text="Email" Margin="5 0" VerticalAlignment="Top"/>
+                                <TextBlock Grid.Row="2" Grid.Column="1" Text=":"  VerticalAlignment="Top"/>
+                                <TextBlock Grid.Row="2" Grid.Column="2" Margin="5 0"  VerticalAlignment="Top" TextWrapping="Wrap">
+                                    <Run Text="{Binding EMail, Mode=OneWay}"/>
+                                    <Run Text=" "/><Run Text="{Binding EmailType, Mode=OneWay}" d:Text="(abuse email)"/>
+                                </TextBlock>
+
+
+
+                                <TextBlock Grid.Row="3" Grid.Column="0" Text="Phone" Margin="5 0" VerticalAlignment="Top"/>
+                                <TextBlock Grid.Row="3" Grid.Column="1" Text=":"  VerticalAlignment="Top"/>
+                                <TextBlock Grid.Row="3" Grid.Column="2" Text="{Binding Phone, Mode=OneWay}" Margin="5 0"  VerticalAlignment="Top" TextWrapping="Wrap"/>
+
+                                <TextBlock Grid.Row="4" Grid.Column="0" Text="Fax" Margin="5 0" VerticalAlignment="Top"/>
+                                <TextBlock Grid.Row="4" Grid.Column="1" Text=":"  VerticalAlignment="Top"/>
+                                <TextBlock Grid.Row="4" Grid.Column="2" Text="{Binding Fax, Mode=OneWay}" Margin="5 0"  VerticalAlignment="Top" TextWrapping="Wrap"/>
+
+
+                                <TextBlock Grid.Row="5" Grid.Column="0" Text="Meta Data" Margin="5 0" VerticalAlignment="Top"/>
+                                <TextBlock Grid.Row="5" Grid.Column="1" Text=":"  VerticalAlignment="Top"/>
+                                <StackPanel Grid.Row="5" Grid.Column="2" Margin="5 0" VerticalAlignment="Top">
+                                    <StackPanel Orientation="Horizontal" >
+
+
+                                        <TextBlock TextWrapping="Wrap">
+                                        <Run Text="created:"/><Run Text=" "/>
+                                        <Run Text="{Binding Created, Mode=OneWay, StringFormat=d}"/>
+                                        <Run Text=" "/><Run Text="- last update"/>
+                                        <Run Text=" "/>
+                                        <Run Text="{Binding LastModified, Mode=OneWay, StringFormat=d}"/>
+                                        </TextBlock>
+                                        <Controll:Hyperlink  Text="(raw data)" Uri="{Binding Url, Mode=OneWay}" Margin="5 0 0 0"/>
+                                    </StackPanel>
+                                    <TextBlock Text="{Binding Remarks, Mode=OneWay}"/>
+                                </StackPanel>
+
+
+
+
+
+
+
+                            </Grid>
+                        </DataTemplate>
+                    </Syncfusion:TabControlExt.ContentTemplate>
+                </Syncfusion:TabControlExt>
+                <StackPanel Grid.Row="5" Margin="0 15 0 0" >
+                    <TextBlock Text="Meta Data" Style="{StaticResource Header3}"/>
+                    <TextBlock Text="The following meta data is extracted for this Internet Service Provider"/>
+                </StackPanel>
+                <Grid Grid.Row="6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" SharedSizeGroup="true"/>
+                        <ColumnDefinition Width="auto" SharedSizeGroup="true" MinWidth="5"/>
+                        <ColumnDefinition Width="auto" SharedSizeGroup="true"/>
+                        <ColumnDefinition Width="auto" SharedSizeGroup="true"/>
+                        <ColumnDefinition Width="auto" SharedSizeGroup="true"  MinWidth="5"/>
+                        <ColumnDefinition Width="auto" SharedSizeGroup="true"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Registration" Margin="15 0 5 0"/>
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text=":" />
+                    <TextBlock Grid.Row="0" Grid.Column="2" Margin="5 0 5 0">
+                        <Run Text="Created"/>
+                        <Run Text="{Binding Path=WHOIS.Created, Mode=OneWay, StringFormat=d}" d:Text="02.12.1998"/>
+                        <Run Text=" - Last update"/>
+                        <Run Text="{Binding Path=WHOIS.Changed, Mode=OneWay, StringFormat=d}" d:Text="01.01.2021"/>
+                    </TextBlock>
+                    <TextBlock Grid.Row="0" Grid.Column="3" Text="Discovered" Margin="5 0"/>
+                    <TextBlock Grid.Row="0" Grid.Column="4" Text=":"/>
+                    <TextBlock Grid.Row="0" Grid.Column="5" Text="{Binding Path=WHOIS.Discovered,Mode=OneWay}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="DNS Entry" Margin="15 0 0 0"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text=":" />
+                    <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Path=WHOIS.SourceDns.HostName, Mode=OneWay}" d:Text="81-206-151-236.fixed.kpn.net" Margin="5 0"/>
+                    <TextBlock Grid.Row="1" Grid.Column="3" Text="DNS Host" Margin="5 0"/>
+                    <TextBlock Grid.Row="1" Grid.Column="4" Text=":"/>
+                    <TextBlock Grid.Row="1" Grid.Column="5" Text="{Binding Path=WHOIS.SourceDns.DnsDomainName, Mode=OneWay}" d:Text="fixed.kpn.net" Margin="5 0"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Name" Margin="15 0 0 0"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1" Text=":" />
+                    <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding Path=WHOIS.RangeName, Mode=OneWay}" d:Text="KPN" Margin="5 0"/>
+                    <TextBlock Grid.Row="2" Grid.Column="3" Text="Source" Margin="5 0"/>
+                    <TextBlock Grid.Row="2" Grid.Column="4" Text=":"/>
+                    <Controll:Hyperlink  Grid.Row="2" Grid.Column="5" Uri="{Binding Path=WHOIS.ICAN_URL, Mode=OneWay}" Text="{Binding Path=WHOIS.Source, Mode=OneWay}" d:Text="www.ican.com"/>
+
+                    <TextBlock Grid.Row="3" Text="Notes" Margin="15 0 0 0"/>
+                    <TextBlock Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4" TextWrapping="Wrap" Text="{Binding Path=WHOIS.Remarks, Mode=OneWay}" ToolTip="source of the notes is the ISP registrar"/>
+                </Grid>
+            </Grid>
+        </ScrollViewer>
+
+        <Grid Grid.Row="2" Margin="5"  >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="164"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal">
+            <Button Command="{Binding DlgCommand}" CommandParameter="Cancel" Content="Cancel" Width="64" Margin="15 0" />
+            <Button Command="{Binding DlgCommand}" CommandParameter="OK" Content="OK" Width="64" IsEnabled="{Binding IsNotReadOnly}" />
+                
+            </StackPanel>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+
+                <Syncfusion:ButtonAdv Content="ButtonAdv" Label="Action" Margin="16,2,0,0" Width="75"
+                                                  ToolTip="Perform a quick action on the selected ISP dataset"
+                                       SmallIcon="/Resources/24/signal_flag_red.png" HorizontalAlignment="Left" 
+                                       Command="{Binding FireWallAction}"
+                                      />
+                <Syncfusion:ButtonAdv Content="ButtonAdv" Label="Brows" Margin="16,2,0,0" Width="75"
+                                                  ToolTip="View ISP data on-line in RIPE database"
+                                       SmallIcon="/Resources/24/window_earth.png" HorizontalAlignment="Left" 
+                                       Command="{Binding OpenUrl}"
+                                      />
+            </StackPanel>
+
+
+        </Grid>
+
+
+    </Grid>
+</UserControl>

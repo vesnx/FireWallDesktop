@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "open abuse": {
+      "commandName": "Project",
+      "commandLineArgs": "X:\\20210807AT-88-Z.abuse"
+    },
+    "Start": {
+      "commandName": "Project"
+    }
+  }
+}

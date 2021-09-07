@@ -1,0 +1,16 @@
+Dear Sir/ Madam
+
+This report is addressed to you based on activity that has been triggered by {ReportedEntries} IP addresses that are maintained by you.
+
+We refer to the malicious activity that has been reported. In case you only host the hardware and not the hereafter mentioned IP addresses, we ask you kindly to contact us at {Email} within 30 days.
+
+In order to avoid further abuse through your hosted IP address(es) please address the issue internally within 5 working days.
+
+To safeguard the domain {Domain} we will activate protective measures.
+
+We expect an update regarding this matter and hereby inform you that we reserve the right to claim any damage made and communicate this report with cybercrime related law enforcement.
+
+
+Thank you for your cooperation in this matter
+
+Yours sincerely

@@ -1,0 +1,49 @@
+﻿<Window 
+             xmlns:Views="clr-namespace:Desktop.Authentication.Views;assembly=Desktop.Authentication"  
+             x:Class="Desktop.Dialogs.LoginDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"             
+             prism:ViewModelLocator.AutoWireViewModel="True"
+        xmlns:controll="clr-namespace:Desktop.Authentication.Controll;assembly=Desktop.Authentication"
+        Height="420" Width="650" WindowStartupLocation="CenterScreen"
+        >
+    <Grid prism:Dialog.WindowStartupLocation="CenterOwner">
+        <Border 
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center">
+
+            <Grid Grid.IsSharedSizeScope="True">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0"
+                HorizontalAlignment="Center"
+                FontSize="48"
+                Text="Firewall Desktop Login" />
+
+                <TextBlock Grid.Row="1" Margin="0,0,0,10"
+                HorizontalAlignment="Center" 
+                   FontWeight="Thin"
+                Text="firewall management and reporting for asp-waf firewalls." />
+                <Views:LoginControl Grid.Row="2" x:Name="dlgControl"/>
+
+
+                <StackPanel Grid.Row="3" Margin="0 10" HorizontalAlignment="Center" Orientation="Horizontal">
+                    <TextBlock FontWeight="Thin" Text="Powered by VESNIX AG Luxembourg" />
+                    <Rectangle Width="1"  Margin="5 0" Fill="Silver" />
+                    <controll:Hyperlink Text="www.asp-waf.com" Uri="https://www.asp-waf.com" Color="black" FontWeight="Thin" />
+                    <Rectangle Width="1"  Margin="5 0" Fill="Silver" />
+                    <controll:Hyperlink Text="info@asp-waf.com" Uri="mailto:info@asp-waf.com" Color="black" FontWeight="Thin"/>
+                </StackPanel>
+            </Grid>
+
+        </Border>
+
+
+    </Grid>
+
+</Window>
