@@ -44,12 +44,12 @@
             <TextBlock Text=": from" Margin="0,0,12,0"  FontWeight="Light"  VerticalAlignment="Center"/>
             <Syncfusion:DateTimeEdit Style="{StaticResource datetimeEdit}"
                                                          DateTime="{Binding Path=From, Mode=TwoWay}" 
-                                                        d:DateTime="01.01.2021"  MaxDateTime="{Binding Path=MaxDateTimeFrom, Mode=OneTime}"
+                                                        d:DateTime="01.01.2021"  
                                                          />
             <TextBlock Text="Till" Margin="15 0"  FontWeight="Light"  VerticalAlignment="Center"/>
             <Syncfusion:DateTimeEdit Style="{StaticResource datetimeEdit}" 
                                                          DateTime="{Binding Path=Till, Mode=TwoWay}"  
-                                                         d:DateTime="07.01.2021 23:59:59" MaxDateTime="{Binding Path=MaxDateTimeTill, Mode=OneTime}"
+                                                         d:DateTime="07.01.2021 23:59:59" 
                                                          />
 
 

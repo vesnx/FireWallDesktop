@@ -91,14 +91,7 @@ namespace Desktop.Dialogs
 
         public DelegateCommand GeneratePDF { get; }
         public DelegateCommand ExportToDisk { get; }
-
-
-
         public DelegateCommand GenerateTXT { get; }
-
-        public DateTime MaxDateTimeFrom { get; } = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1));
-
-        public DateTime MaxDateTimeTill { get; } = DateTime.UtcNow;
 
 
 
@@ -304,6 +297,7 @@ namespace Desktop.Dialogs
             var dlg = new SaveFileDialog();
             dlg.Title = "Save Abuse report";
             dlg.Filter = "Adobe PDF|*.pdf";
+            dlg.FileName = string.Concat(Report.RangeName ,"_",_filter.From.Year,"_",_filter.From.DayOfYear,"_",_filter.Till.DayOfYear, ".pdf");
 
             if (dlg.ShowDialog() == true)
             {

@@ -70,9 +70,7 @@ namespace Desktop.Dialogs
             }
         }
 
-        public DateTime MaxDateTimeFrom { get; } = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1));
 
-        public DateTime MaxDateTimeTill { get; } = DateTime.UtcNow;
 
 
         public DateTime From { get=>_filter?.From??DateTime.MinValue;
