@@ -4,4 +4,4 @@ ASP-WAF firewall desktop demo project contans a sample PRISM WPF application tha
 You willl need .Net 5.0 and visual studio 2019 community version or better. 
 The NuGet packages needed to build the project are included in the NuGet folder.
 
-![Snipid desktop view](https://www.asp-waf.com/Imaged/Desktop/Desktip.png)
+![Snipid desktop view](https://www.asp-waf.com/Images/Desktop/Desktop.png)
