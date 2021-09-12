@@ -306,7 +306,7 @@ namespace Desktop.Dialogs
 
                 await Task.Run(() => _reporter.GeneratePDF(Report, Filter, ReportSettings, new FileInfo(dlg.FileName)), PageTokenSource.Token);
 
-                if (File.Exists(dlg.FileName) && ReportSettings.CanMakeWebLink && ReportSettings.MakeWebLink)
+                if (File.Exists(dlg.FileName) && Report.RangeId!=0  && ReportSettings.CanMakeWebLink && ReportSettings.MakeWebLink)
                 {
                     LoadingProgress = $"uploading {dlg.FileName} to {RunTime.SelectedFireWall.DisplayName} for ENISA & SOC processing and archiving";
                     using (var reader = File.Open(dlg.FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
@@ -477,6 +477,10 @@ namespace Desktop.Dialogs
                     else
                     {
                         report.Update(report.Audit);
+                    }
+                    if (ReportSettings.MakeWebLink)
+                    {
+                        ReportSettings.MakeWebLink = Report.RangeId != 0;
                     }
                 }
                 else

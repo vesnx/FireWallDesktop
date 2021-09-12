@@ -194,7 +194,8 @@
                     <TextBlock Text="-" Style="{StaticResource Header1}" Foreground="{StaticResource Gray6}" Margin="15 0"/>
 
                     <TextBlock Text="Incidents detected:" Style="{StaticResource Header1}" Foreground="{StaticResource Gray6}"/>
-                    <TextBlock Text="{Binding Incidents, Mode=OneWay, StringFormat=N0}" Style="{StaticResource Header1}" 
+                    <TextBlock Text="{Binding Incidents, Mode=OneWay, StringFormat=N0}" 
+                               Style="{StaticResource Header1}" Foreground="{StaticResource Gray6}"
                            d:Text="32" Margin="5 0" ToolTip="Incidents detected in 24 hours"/>
 
                 </StackPanel>
