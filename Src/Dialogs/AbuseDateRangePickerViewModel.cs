@@ -20,6 +20,7 @@ namespace Desktop.Dialogs
             _log = log;
             _log.LogCreated();
             DlgOkCommand = new DelegateCommand<string>(OnOkButton, CanSubmit);
+   
 
         }
 
@@ -42,7 +43,7 @@ namespace Desktop.Dialogs
 
         public Prism.Commands.DelegateCommand<string> DlgOkCommand { get; }
 
-        bool _portBasedAttacks;
+        private bool _portBasedAttacks;
         public bool PortBasedAttacks
         {
             get => _portBasedAttacks;
@@ -81,7 +82,9 @@ namespace Desktop.Dialogs
 
             }
         }
-        public DateTime Till { get=>_filter?.Till??DateTime.MinValue; 
+        public DateTime Till 
+        { 
+            get=>_filter?.Till??DateTime.MinValue; 
             set{
                 _filter.Till = value;
                 RaisePropertyChanged(nameof(Till));

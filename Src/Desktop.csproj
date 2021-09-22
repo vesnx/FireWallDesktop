@@ -105,19 +105,19 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="log4net" Version="2.0.12" />
-    <PackageReference Include="Syncfusion.SfBarcode.WPF" Version="19.2.0.60" />
-    <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="19.2.0.60" />
-    <PackageReference Include="Walter.BOM" Version="2021.9.9.1110" />
+    <PackageReference Include="Syncfusion.SfBarcode.WPF" Version="19.2.0.62" />
+    <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="19.2.0.62" />
+    <PackageReference Include="Walter.BOM" Version="2021.9.19.1015" />
     <PackageReference Include="Prism.DryIoc" Version="8.1.97" />
-    <PackageReference Include="Syncfusion.DataGridExcelExport.Wpf" Version="19.2.0.60" />
-    <PackageReference Include="Syncfusion.SfNavigationDrawer.WPF" Version="19.2.0.60" />
-    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="19.2.0.60" />
-    <PackageReference Include="Syncfusion.Themes.FluentLight.WPF" Version="19.2.0.60" />
-    <PackageReference Include="syncfusion.ui.wpf.net" Version="19.2.0.60" />
-    <PackageReference Include="Syncfusion.Grid.WPF" Version="19.2.0.60" />
-    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="19.2.0.60" />
-    <PackageReference Include="Syncfusion.SfSpreadsheet.WPF" Version="19.2.0.60" />
-    <PackageReference Include="Walter.Net.Networking" Version="2021.9.9.1110" />
+    <PackageReference Include="Syncfusion.DataGridExcelExport.Wpf" Version="19.2.0.62" />
+    <PackageReference Include="Syncfusion.SfNavigationDrawer.WPF" Version="19.2.0.62" />
+    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="19.2.0.62" />
+    <PackageReference Include="Syncfusion.Themes.FluentLight.WPF" Version="19.2.0.62" />
+    <PackageReference Include="syncfusion.ui.wpf.net" Version="19.2.0.62" />
+    <PackageReference Include="Syncfusion.Grid.WPF" Version="19.2.0.62" />
+    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="19.2.0.62" />
+    <PackageReference Include="Syncfusion.SfSpreadsheet.WPF" Version="19.2.0.62" />
+    <PackageReference Include="Walter.Net.Networking" Version="2021.9.19.1015" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Desktop.Authentication\Desktop.Authentication.csproj" />

@@ -43,17 +43,14 @@
         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="0 5">
             <TextBlock Text=": from" Margin="0,0,12,0"  FontWeight="Light"  VerticalAlignment="Center"/>
             <Syncfusion:DateTimeEdit Style="{StaticResource datetimeEdit}"
-                                                         DateTime="{Binding Path=From, Mode=TwoWay}" 
-                                                        d:DateTime="01.01.2021"  
-                                                         />
+                                     DateTime="{Binding From, Mode=TwoWay}" 
+                                     d:DateTime="01.01.2021"  
+                                    />
             <TextBlock Text="Till" Margin="15 0"  FontWeight="Light"  VerticalAlignment="Center"/>
             <Syncfusion:DateTimeEdit Style="{StaticResource datetimeEdit}" 
-                                                         DateTime="{Binding Path=Till, Mode=TwoWay}"  
-                                                         d:DateTime="07.01.2021 23:59:59" 
-                                                         />
-
-
-
+                                     DateTime="{Binding Till, Mode=TwoWay}"  
+                                     d:DateTime="07.01.2021 23:59:59" 
+                                     />
         </StackPanel>
         <TextBlock Grid.Row="2" Text="Include"  FontWeight="DemiBold" VerticalAlignment="Bottom" Margin="0,10,0,5" />
         <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="0,5,5,0">
