@@ -11,6 +11,9 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+using System;
+using System.IO;
+using System.Threading.Tasks;
 using Desktop.Core.Dialogs;
 using Desktop.Infrastructure;
 using Desktop.Model;
@@ -22,9 +25,6 @@ using Newtonsoft.Json;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Services.Dialogs;
-using System;
-using System.IO;
-using System.Threading.Tasks;
 using Walter.BOM;
 
 namespace Desktop.Dialogs
@@ -46,6 +46,7 @@ namespace Desktop.Dialogs
         private bool _makeWebLinkEnabled = false;
         internal static string FILE = "FILE";
         private bool _showGeneratePdf;
+        private string _xARF_TOOLTIP;
 
         public AbuseReportBuilderViewModel(IDialogService dialogService, IDataService service, IEventAggregator eventAggregator, IReporter reporter, ILog log)
         : base(dialogService, service, eventAggregator)
@@ -54,6 +55,9 @@ namespace Desktop.Dialogs
             GeneratePDF = new DelegateCommand(async () => await PerformGeneratePDF(), CanGenerate);
             PreviewPdf = new DelegateCommand(async () => await PerformPreviewPdf(), CanGenerate);
             GenerateTXT = new DelegateCommand(async () => await PerformGenerateTXT(), CanGenerate);
+            SendUsingOutlook = new DelegateCommand(async () => await PerformGenerateMailPDF(), CanEmail);
+            SendViaSmtp = new DelegateCommand(PerformOpenSMTP, CanEmail);
+
             RefreshNow = new DelegateCommand(PerformRefresh, CanRefresh);
             _reporter = reporter;
             _log = log;
@@ -88,12 +92,12 @@ namespace Desktop.Dialogs
 
 
 
-
+        public DelegateCommand SendViaSmtp { get; }
         public DelegateCommand GeneratePDF { get; }
         public DelegateCommand ExportToDisk { get; }
         public DelegateCommand GenerateTXT { get; }
 
-
+        public string XARF_TOOLTIP { get => _xARF_TOOLTIP; set => SetProperty(ref _xARF_TOOLTIP, value); }
 
         public bool PortBasedAttacks
         {
@@ -110,7 +114,7 @@ namespace Desktop.Dialogs
         }
 
         public DelegateCommand PreviewPdf { get; }
-
+        public DelegateCommand SendUsingOutlook { get; }
         public DelegateCommand RefreshNow { get; }
 
         public SimpleAbuseReport Report
@@ -197,10 +201,14 @@ namespace Desktop.Dialogs
                 IsBusy = false;
                 PreviewPdf.RaiseCanExecuteChanged();
                 GeneratePDF.RaiseCanExecuteChanged();
-
+                SendUsingOutlook.RaiseCanExecuteChanged();
             }
         }
 
+        private bool CanEmail()
+        {
+            return Report is not null && !string.IsNullOrEmpty(Report.AbuseEmail) && CanGenerate();
+        }
         private bool CanGenerate()
         {
 
@@ -222,12 +230,16 @@ namespace Desktop.Dialogs
             RefreshNow.RaiseCanExecuteChanged();
             GeneratePDF.RaiseCanExecuteChanged();
             PreviewPdf.RaiseCanExecuteChanged();
+            SendUsingOutlook.RaiseCanExecuteChanged();
             GenerateTXT.RaiseCanExecuteChanged();
         }
 
         public AbuseReportSettings ReportSettings { get => _reportSettings; }
 
+        private void PerformOpenSMTP()
+        {
 
+        }
         private async Task PerformExportToDisk()
         {
             var dlg = new SaveFileDialog();
@@ -289,15 +301,79 @@ namespace Desktop.Dialogs
 
         }
 
+        private async Task PerformGenerateMailPDF()
+        {
+            ReportSettings.SaveSettings();
+
+            base.IsBusy = true;
+            LoadingProgress = "Generating PDF";
+            RunTime.SelectedFireWall.SavedAbuseReports[Report.RangeId] = DateTime.UtcNow;
+            await RunTime.SelectedFireWall.ToDiskAsync();
+
+
+            var file = new FileInfo(Path.Combine(Path.GetTempPath(), $"{DateTime.Now.Ticks}.pdf"));
+
+
+
+            try
+            {
+                await Task.Run(() => _reporter.GeneratePDF(Report, Filter, ReportSettings, file, false), PageTokenSource.Token);
+                file.Refresh();
+                if (file.Exists)
+                {
+                    try
+                    {
+                        LoadingProgress = "Loading Mail Client";
+                        Report.Email(file);
+                    }
+                    catch (Exception ex)
+                    {
+                        _log.LogException(ex);
+                        DialogService.ShowMessageDialog("Could not open mail client to send the PDF, associate a application with the .eml file format and try again.", "Failed open mail client");
+                        return;
+                    }
+                }
+                if (file.Exists && Report.RangeId != 0 && ReportSettings.CanMakeWebLink && ReportSettings.MakeWebLink)
+                {
+
+
+                    LoadingProgress = $"uploading {file.Name} to {RunTime.SelectedFireWall.DisplayName} for ENISA & SOC processing and archiving";
+                    using (var reader = File.Open(file.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    {
+                        var pdf = new byte[reader.Length];
+                        reader.Read(pdf, 0, pdf.Length);
+                        var saved = await DataService.StoreAbuseReport(Report, ReportSettings, pdf, PageTokenSource?.Token ?? default);
+                        if (saved)
+                        {
+                            //upload date trumps local date
+                            RunTime.SelectedFireWall.SavedAbuseReports[Report.RangeId] = DateTime.UtcNow;
+                            await RunTime.SelectedFireWall.ToDiskAsync();
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _log.LogException(ex);
+                DialogService.ShowMessageDialog("Could not generate report due to a data compatibility issue, please update the software to match the firewall", "Failed to generate");
+            }
+
+
+
+            IsBusy = false;
+        }
+
         private async Task PerformGeneratePDF()
         {
-
+            RunTime.SelectedFireWall.SavedAbuseReports[Report.RangeId] = DateTime.UtcNow;
+            await RunTime.SelectedFireWall.ToDiskAsync();
             ReportSettings.SaveSettings();
 
             var dlg = new SaveFileDialog();
             dlg.Title = "Save Abuse report";
             dlg.Filter = "Adobe PDF|*.pdf";
-            dlg.FileName = string.Concat(Report.RangeName ,"_",_filter.From.Year,"_",_filter.From.DayOfYear,"_",_filter.Till.DayOfYear, ".pdf");
+            dlg.FileName = string.Concat(Report.RangeName, "_", _filter.From.Year, "_", _filter.From.DayOfYear, "_", _filter.Till.DayOfYear, ".pdf");
 
             if (dlg.ShowDialog() == true)
             {
@@ -306,7 +382,7 @@ namespace Desktop.Dialogs
 
                 await Task.Run(() => _reporter.GeneratePDF(Report, Filter, ReportSettings, new FileInfo(dlg.FileName)), PageTokenSource.Token);
 
-                if (File.Exists(dlg.FileName) && Report.RangeId!=0  && ReportSettings.CanMakeWebLink && ReportSettings.MakeWebLink)
+                if (File.Exists(dlg.FileName) && Report.RangeId != 0 && ReportSettings.CanMakeWebLink && ReportSettings.MakeWebLink)
                 {
                     LoadingProgress = $"uploading {dlg.FileName} to {RunTime.SelectedFireWall.DisplayName} for ENISA & SOC processing and archiving";
                     using (var reader = File.Open(dlg.FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
@@ -315,7 +391,13 @@ namespace Desktop.Dialogs
                         reader.Read(pdf, 0, pdf.Length);
 
 
-                        await DataService.StoreAbuseReport(Report,ReportSettings, pdf, PageTokenSource?.Token ?? default);
+                        var saved = await DataService.StoreAbuseReport(Report, ReportSettings, pdf, PageTokenSource?.Token ?? default);
+                        if (saved)
+                        {
+                            //upload date trumps local date
+                            RunTime.SelectedFireWall.SavedAbuseReports[Report.RangeId] = DateTime.UtcNow;
+                            await RunTime.SelectedFireWall.ToDiskAsync();
+                        }
                     }
                 }
 
@@ -346,24 +428,31 @@ namespace Desktop.Dialogs
             var dlg = new SaveFileDialog();
             dlg.Title = "Save Abuse report";
             dlg.Filter = "Text file|*.txt";
-
-            if (dlg.ShowDialog() == true)
+            try
             {
-                LoadingProgress = $"Generating {dlg.FileName}";
-
-                await Task.Delay(1);
-
-                using var pdf = _reporter.GeneratePDF(Report, Filter, ReportSettings);
-                Syncfusion.Windows.PdfViewer.PdfDocumentView pdfDocumentView = new();
-                pdfDocumentView.Load(pdf);
-                Syncfusion.Pdf.TextLines textLines = new();
-
-                for (int i = 0; i < pdfDocumentView.PageCount; i++)
+                if (dlg.ShowDialog() == true)
                 {
+                    IsBusy = true;
+                    LoadingProgress = $"Generating {dlg.FileName}";
 
-                    System.IO.File.AppendAllText(dlg.FileName, pdfDocumentView.ExtractText(i, out textLines));
+                    await _reporter.GenerateTXTAsync(Report, _reportSettings, new FileInfo(dlg.FileName), PageTokenSource.Token);
+
+                    if (base.DialogService.ShowMessageDialog($"Would you like to open {dlg.FileName}?"
+                                                        , "Preview"
+                                                        , System.Windows.MessageBoxImage.Question
+                                                        , System.Windows.MessageBoxButton.YesNo) == ButtonResult.Yes)
+                    {
+                        using System.Diagnostics.Process process = new System.Diagnostics.Process();
+                        process.StartInfo = new System.Diagnostics.ProcessStartInfo(dlg.FileName) { UseShellExecute = true };
+                        process.Start();
+
+                    }
 
                 }
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 
@@ -383,6 +472,8 @@ namespace Desktop.Dialogs
             try
             {
                 await Task.Run(() => _reporter.GeneratePDF(Report, Filter, ReportSettings, file, false), PageTokenSource.Token);
+
+
             }
             catch (Exception ex)
             {
@@ -482,6 +573,8 @@ namespace Desktop.Dialogs
                     {
                         ReportSettings.MakeWebLink = Report.RangeId != 0;
                     }
+
+                    XARF_TOOLTIP = $"Send as {Report.Audit.Entries} individual XARF abuse email";
                 }
                 else
                 {
@@ -507,6 +600,7 @@ namespace Desktop.Dialogs
                 RefreshNow.RaiseCanExecuteChanged();
                 GenerateTXT.RaiseCanExecuteChanged();
                 ExportToDisk.RaiseCanExecuteChanged();
+                SendUsingOutlook.RaiseCanExecuteChanged();
             }
 
 

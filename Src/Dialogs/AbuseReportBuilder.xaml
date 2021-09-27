@@ -557,9 +557,10 @@
                           Margin="0 5 25 0"
                           Visibility="{Binding MakeWebLinkEnabled, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-                <Syncfusion:ButtonAdv Content="ButtonAdv" Label="Save" Margin="16,0,0,0" Width="75" ToolTip="Save the abuse report to disk as text"
+                <Syncfusion:ButtonAdv Content="ButtonAdv" Label="Save" Margin="16,0,0,0" Width="75" 
+                                      ToolTip="Copy the abuse data to clipboard "
                                        SmallIcon="/Resources/24/NotePad.png" HorizontalAlignment="Left" 
-                                      Command="{Binding GenerateTXT}"  Visibility="Collapsed"
+                                      Command="{Binding GenerateTXT}" 
                                       />
                 <Syncfusion:ButtonAdv Content="ButtonAdv" Label="Save" Margin="16,0,0,0" Width="75" ToolTip="Save the abuse report to disk as PDF"
                                        SmallIcon="/Resources/24/PDF.png" HorizontalAlignment="Left" 
@@ -570,13 +571,19 @@
                                        SmallIcon="/Resources/24/document_view.png" HorizontalAlignment="Left" 
                                       Command="{Binding PreviewPdf}"
                                       />
-
+                <Syncfusion:ButtonAdv Content="ButtonAdv" Label="E-Mail" Margin="16,0,0,0" Width="75" 
+                                      ToolTip="Generate a .eml file that with abuse report attached as an email"
+                                       SmallIcon="/Resources/24/mail_write.png" HorizontalAlignment="Left" 
+                                      Command="{Binding SendUsingOutlook}"
+                                      />
                 <Syncfusion:ButtonAdv Content="ButtonAdv" Label="Export" Margin="16,0,0,0" Width="75" ToolTip="Preview &amp; Edit the abuse report"
                                        SmallIcon="/Resources/24/document_out.png" HorizontalAlignment="Left" 
                                       Command="{Binding ExportToDisk}" Visibility="Collapsed"
                                       />
 
+
             </StackPanel>
+
 
 
         </Grid>

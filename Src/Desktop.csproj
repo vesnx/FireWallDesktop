@@ -24,8 +24,6 @@
     <PackageReleaseNotes>Release 0, beta</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/PeterPann23/FireWallDesktop</RepositoryUrl>
     <RepositoryType>GitGub</RepositoryType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
@@ -53,6 +51,7 @@
     <None Remove="Resources\24\export.png" />
     <None Remove="Resources\24\location_pin.png" />
     <None Remove="Resources\24\magnifying_glass.png" />
+    <None Remove="Resources\24\mail_write.png" />
     <None Remove="Resources\24\NotePad.png" />
     <None Remove="Resources\24\PDF.png" />
     <None Remove="Resources\24\pin2_blue.png" />
@@ -62,6 +61,7 @@
     <None Remove="Resources\24\pin2_red.png" />
     <None Remove="Resources\24\pin2_yellow.png" />
     <None Remove="Resources\24\refresh.png" />
+    <None Remove="Resources\24\server_mail_upload.png" />
     <None Remove="Resources\24\signal_flag_green.png" />
     <None Remove="Resources\24\signal_flag_red.png" />
     <None Remove="Resources\24\ThemePicker.png" />
@@ -90,6 +90,7 @@
     <Resource Include="Resources\16\document_view.png" />
     <Resource Include="Resources\24\document_out.png" />
     <Resource Include="Resources\24\export.png" />
+    <Resource Include="Resources\24\mail_write.png" />
     <Resource Include="Resources\24\NotePad.png" />
     <EmbeddedResource Include="Pdf\ENISA.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -105,9 +106,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="log4net" Version="2.0.12" />
+    <PackageReference Include="MailKit" Version="2.15.0" />
     <PackageReference Include="Syncfusion.SfBarcode.WPF" Version="19.2.0.62" />
     <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="19.2.0.62" />
-    <PackageReference Include="Walter.BOM" Version="2021.9.19.1015" />
+    <PackageReference Include="Walter.BOM" Version="2021.9.26.1913" />
     <PackageReference Include="Prism.DryIoc" Version="8.1.97" />
     <PackageReference Include="Syncfusion.DataGridExcelExport.Wpf" Version="19.2.0.62" />
     <PackageReference Include="Syncfusion.SfNavigationDrawer.WPF" Version="19.2.0.62" />
@@ -117,7 +119,7 @@
     <PackageReference Include="Syncfusion.Grid.WPF" Version="19.2.0.62" />
     <PackageReference Include="Syncfusion.SfGrid.WPF" Version="19.2.0.62" />
     <PackageReference Include="Syncfusion.SfSpreadsheet.WPF" Version="19.2.0.62" />
-    <PackageReference Include="Walter.Net.Networking" Version="2021.9.19.1015" />
+    <PackageReference Include="Walter.Net.Networking" Version="2021.9.26.1913" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Desktop.Authentication\Desktop.Authentication.csproj" />
@@ -151,6 +153,7 @@
     <Resource Include="Resources\24\pin2_red.png" />
     <Resource Include="Resources\24\pin2_yellow.png" />
     <Resource Include="Resources\24\refresh.png" />
+    <Resource Include="Resources\24\server_mail_upload.png" />
     <Resource Include="Resources\24\signal_flag_green.png" />
     <Resource Include="Resources\24\signal_flag_red.png" />
     <Resource Include="Resources\24\ThemePicker.png">

@@ -167,6 +167,7 @@ namespace Desktop.ViewModels
         private void PerformGenerateAbuseReport(SimpleISP simple)
         {
             var dlgService = _containerProvider.Resolve<IDialogService>();
+            var from =simple.LastKnownAbuseReport ?? DateTime.UtcNow.AddMonths(-1).Date;
             var cmd = new AbuseReportCommand()
             {
                 DataSource = AbuseReportCommand.Filter.ISPRangeId,
@@ -174,8 +175,8 @@ namespace Desktop.ViewModels
                 BreadCrumbs = false,
                 PortBasedAttacks = true,
                 WebRequests = true,
-                From = DateTime.UtcNow.AddMonths(-1),
-                Till = DateTime.UtcNow
+                From = new DateTime(from.Year,from.Month,from.Day,0,0,0,0,kind:DateTimeKind.Utc),
+                Till = DateTime.UtcNow.Date
             };
 
             var p = new DialogParameters()
@@ -1101,12 +1102,6 @@ namespace Desktop.ViewModels
                 IsLoading = false;
             }
             //.ContinueWith(Populate, PageTokenSource.Token).ConfigureAwait(false);
-
-
-
-
-
-
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)

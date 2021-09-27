@@ -165,25 +165,33 @@ namespace Desktop
                 && firewall.User.HasPassword())
             {
                 var auth = Container.Resolve<IAuthenticationService>();
-                var result = await auth.LoginAsync(firewall, firewall.User.UserName, firewall.User.GetPassword());
-                if (result == System.Net.HttpStatusCode.OK)
+                try
                 {
-                    RunTime.SelectedFireWall = firewall;
-                    if (!string.IsNullOrEmpty(firewall.User.SelectedView))
+                    var result = await auth.LoginAsync(firewall, firewall.User.UserName, firewall.User.GetPassword());
+                    if (result == System.Net.HttpStatusCode.OK)
                     {
-                        var region = Container.Resolve<IRegionManager>();
-                        region.RequestNavigate(RegionNames.ContentRegion, nameof(firewall.User.SelectedView));
+                        RunTime.SelectedFireWall = firewall;
+                        if (!string.IsNullOrEmpty(firewall.User.SelectedView))
+                        {
+                            var region = Container.Resolve<IRegionManager>();
+                            region.RequestNavigate(RegionNames.ContentRegion, nameof(firewall.User.SelectedView));
+                        }
+                    }
+                    else
+                    {
+                        if (auth.CoveredByLogin(result))
+                        {
+                            Application.Current.Shutdown();
+                            return;
+                        }
                     }
                 }
-                else
+                catch(Exception e)
                 {
-                    if (auth.CoveredByLogin(result))
-                    {
-                        Application.Current.Shutdown();
-                        return;
-                    }
+                    log.Error($"Could not login to {firewall.DisplayName} at {firewall.Domain}", e);
+                    throw;
+                    
                 }
-
             }
 
             if (RunTime.SelectedFireWall is null || !RunTime.SelectedFireWall.State.HasFlag(FireWallStates.IsConnected))
